@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
@@ -74,7 +75,6 @@ import com.jay.m3play.utils.rememberPreference
 import com.jay.m3play.viewmodels.LibraryMixViewModel
 import java.text.Collator
 import java.time.LocalDateTime
-import java.util.Locale
 import java.util.UUID
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -145,7 +145,7 @@ fun LibraryMixScreen(
     val playlist = viewModel.playlists.collectAsState()
 
     var allItems = albums.value + artist.value + playlist.value
-    val collator = Collator.getInstance(Locale.getDefault())
+    val collator = Collator.getInstance(LocalConfiguration.current.locales[0])
     collator.strength = Collator.PRIMARY
     allItems =
         when (sortType) {

@@ -8,6 +8,7 @@ import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SliderState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
@@ -17,6 +18,13 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+
+/** Keep externally driven playback progress and duration in sync with Material 3's slider state. */
+@Composable
+fun rememberPlayerSliderState(value: Float, valueRange: ClosedFloatingPointRange<Float>): SliderState =
+    remember(valueRange) { SliderState(trackRange = valueRange) }.apply {
+        this.value = value
+    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +38,7 @@ fun PlayerSliderTrack(
     val activeTrackColor = colors.activeTrackColor
     val inactiveTickColor = colors.inactiveTickColor
     val activeTickColor = colors.activeTickColor
-    val valueRange = sliderState.valueRange
+    val valueRange = sliderState.trackRange
     Canvas(
         modifier
             .fillMaxWidth()

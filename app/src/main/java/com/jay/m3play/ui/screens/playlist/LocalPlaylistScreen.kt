@@ -106,7 +106,7 @@ import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.jay.innertube.YouTube
 import com.jay.innertube.models.SongItem
 import com.jay.m3play.LocalDatabase
@@ -1600,7 +1600,7 @@ fun LocalPlaylistHeader(
                         }
                     },
                     modifier = Modifier.fillMaxWidth().semantics { role = Role.Button },
-                    shapes = ToggleButtonDefaults.shapes(),
+                    shapes = ToggleButtonDefaults.shapesFor(ToggleButtonDefaults.size),
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.sync),

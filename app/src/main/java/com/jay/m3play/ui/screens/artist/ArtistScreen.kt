@@ -75,7 +75,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.jay.innertube.models.AlbumItem
 import com.jay.innertube.models.ArtistItem
 import com.jay.innertube.models.PlaylistItem
@@ -328,7 +328,7 @@ fun ArtistScreen(
                                 },
                                 modifier = Modifier.weight(1f).semantics { role = Role.Button },
                                 shapes = ButtonGroupDefaults.connectedLeadingButtonShapes(),
-                                colors = ToggleButtonDefaults.toggleButtonColors(
+                                colors = ToggleButtonDefaults.colors(
                                     containerColor = if (libraryArtist?.artist?.bookmarkedAt != null)
                                         MaterialTheme.colorScheme.primary
                                     else
@@ -374,7 +374,7 @@ fun ArtistScreen(
                                     },
                                     modifier = Modifier.weight(1f).semantics { role = Role.Button },
                                     shapes = ButtonGroupDefaults.connectedMiddleButtonShapes(),
-                                    colors = ToggleButtonDefaults.toggleButtonColors(
+                                    colors = ToggleButtonDefaults.colors(
                                         containerColor = MaterialTheme.colorScheme.surfaceVariant,
                                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -406,7 +406,7 @@ fun ArtistScreen(
                                     } else {
                                         ButtonGroupDefaults.connectedTrailingButtonShapes()
                                     },
-                                    colors = ToggleButtonDefaults.toggleButtonColors(
+                                    colors = ToggleButtonDefaults.colors(
                                         containerColor = MaterialTheme.colorScheme.surfaceVariant,
                                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                                     )

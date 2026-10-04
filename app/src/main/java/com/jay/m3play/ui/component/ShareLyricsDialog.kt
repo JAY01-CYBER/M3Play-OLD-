@@ -46,8 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
-import coil.ImageLoader
-import coil.request.ImageRequest
+import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.asDrawable
+import coil3.request.allowHardware
 import com.jay.m3play.R
 import com.jay.m3play.models.MediaMetadata
 import com.jay.m3play.utils.ComposeToImage
@@ -275,7 +277,7 @@ fun ShareLyricsImageCustomizationSheet(
                 try {
                     val loader = ImageLoader(context)
                     val req = ImageRequest.Builder(context).data(coverUrl).allowHardware(false).build()
-                    val drawable = loader.execute(req).drawable
+                    val drawable = loader.execute(req).image?.asDrawable(context.resources)
                     if (drawable != null) {
                         val bitmap = drawable.toBitmap()
                         val palette = Palette.from(bitmap).generate()

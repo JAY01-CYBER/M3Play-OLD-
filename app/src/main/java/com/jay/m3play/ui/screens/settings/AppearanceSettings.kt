@@ -1,5 +1,6 @@
 package com.jay.m3play.ui.screens.settings
 
+import com.jay.m3play.ui.component.rememberPlayerSliderState
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
@@ -223,8 +224,10 @@ fun AppearanceSettings(
                         mutableFloatStateOf(0.5f)
                     }
                     Slider(
-                        value = sliderValue,
-                        valueRange = 0f..1f,
+                        state = rememberPlayerSliderState(
+                            value = sliderValue,
+                            valueRange = 0f..1f,
+                        ),
                         onValueChange = {
                             sliderValue = it
                         },
@@ -291,8 +294,10 @@ fun AppearanceSettings(
                         mutableFloatStateOf(0.5f)
                     }
                     Slider(
-                        value = sliderValue,
-                        valueRange = 0f..1f,
+                        state = rememberPlayerSliderState(
+                            value = sliderValue,
+                            valueRange = 0f..1f,
+                        ),
                         onValueChange = {
                             sliderValue = it
                         },

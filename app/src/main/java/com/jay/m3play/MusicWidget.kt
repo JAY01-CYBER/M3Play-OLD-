@@ -13,8 +13,9 @@ import android.os.Looper
 import android.widget.RemoteViews
 import androidx.core.graphics.drawable.toBitmap
 import androidx.media3.common.Player
-import coil.ImageLoader
-import coil.request.ImageRequest
+import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.asDrawable
 import com.jay.m3play.playback.PlayerConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -231,7 +232,7 @@ class MusicWidget : AppWidgetProvider() {
                                 .data(thumbnailUrl)
                                 .size(160, 160) // Optimizado para el widget
                                 .build()
-                            val drawable = ImageLoader(context).execute(request).drawable
+                            val drawable = ImageLoader(context).execute(request).image?.asDrawable(context.resources)
                             drawable?.let {
                                 views.setImageViewBitmap(R.id.widget_album_art, it.toBitmap())
                                 appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)

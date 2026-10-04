@@ -68,7 +68,7 @@ import androidx.media3.common.PlaybackParameters
 import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.jay.innertube.YouTube
 import com.jay.innertube.models.WatchEndpoint
 import com.jay.m3play.LocalDatabase

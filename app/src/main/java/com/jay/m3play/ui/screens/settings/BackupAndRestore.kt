@@ -65,6 +65,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -72,7 +73,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
+import coil3.annotation.ExperimentalCoilApi
 import com.jay.m3play.LocalPlayerConnection
 import com.jay.m3play.R
 import com.jay.m3play.db.entities.Song
@@ -109,6 +110,7 @@ fun BackupAndRestore(
     scrollBehavior: TopAppBarScrollBehavior,
     viewModel: BackupRestoreViewModel = hiltViewModel(),
 ) {
+    val resources = LocalResources.current
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val playerCache = LocalPlayerConnection.current?.service?.playerCache
@@ -235,7 +237,7 @@ fun BackupAndRestore(
                     onClick = {
                         val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
                         backupLauncher.launch(
-                            "${context.getString(R.string.app_name)}_${
+                            "${resources.getString(R.string.app_name)}_${
                                 LocalDateTime.now().format(formatter)
                             }.backup"
                         )

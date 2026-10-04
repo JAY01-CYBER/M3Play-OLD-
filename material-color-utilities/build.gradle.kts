@@ -3,11 +3,10 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
 dependencies {
-    compileOnly("com.google.errorprone:error_prone_core:2.36.0")
+    compileOnly(libs.errorprone.annotations)
     implementation(libs.annotation)
 }

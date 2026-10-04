@@ -76,7 +76,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.jay.innertube.models.SongItem
 import com.jay.innertube.models.WatchEndpoint
 import com.jay.m3play.LocalDatabase

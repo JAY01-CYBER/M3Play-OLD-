@@ -86,9 +86,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
-import coil.compose.AsyncImage
-import coil.imageLoader
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.asDrawable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadRequest
@@ -869,7 +870,7 @@ suspend fun saveAlbumImageToGallery(context: Context, imageUrl: String, albumTit
             .data(imageUrl)
             .build()
 
-        val drawable = context.imageLoader.execute(request).drawable
+        val drawable = context.imageLoader.execute(request).image?.asDrawable(context.resources)
 
         if (drawable != null) {
             val bitmap = drawable.toBitmap()

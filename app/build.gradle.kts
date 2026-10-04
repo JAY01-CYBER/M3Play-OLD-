@@ -1,10 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("plugin.serialization") version "2.1.0"
-    kotlin("kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.compose.compiler)
@@ -12,12 +10,17 @@ plugins {
 
 android {
     namespace = "com.jay.m3play"
-    compileSdk = 35
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 2
+        }
+    }
+    buildToolsVersion = "37.0.0"
 
     defaultConfig {
         applicationId = "com.jay.m3play"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 37
         versionCode = 2
         versionName = "1.0.1"
  
@@ -84,15 +87,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
 
-    kotlin {
-        jvmToolchain(21)
-    }
-
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
-        jvmTarget = "21"
-    }
-
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
@@ -105,6 +99,17 @@ android {
     dependenciesInfo {
         includeInApk = false
         includeInBundle = false
+    }
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+
+composeCompiler {
+    if (providers.gradleProperty("enableComposeCompilerReports").orNull == "true") {
+        reportsDestination = layout.buildDirectory.dir("compose_metrics")
+        metricsDestination = layout.buildDirectory.dir("compose_metrics")
     }
 }
 
@@ -122,11 +127,12 @@ dependencies {
     implementation(libs.hilt.navigation)
     implementation(libs.datastore)
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.compose.runtime)
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.util)
-    implementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.tooling)
     implementation(libs.compose.animation)
     implementation(libs.compose.reorderable)
 
@@ -138,6 +144,7 @@ dependencies {
     implementation(projects.materialColorUtilities)
 
     implementation(libs.coil)
+    implementation(libs.coil.network)
     implementation(libs.shimmer)
 
     implementation(libs.media3)
@@ -147,25 +154,20 @@ dependencies {
 
     implementation(libs.room.runtime)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.blurry)
     implementation(libs.material.ripple)
-    implementation(libs.room.runtime.android)
     implementation(libs.material.icons.extended)
     implementation(libs.glance.appwidget)
     implementation(libs.glance.material3)
     implementation(libs.graphics.shapes)
     implementation(libs.work.runtime.ktx)
-    implementation(libs.constraintlayout)
-    implementation(libs.itextg)
-    implementation(libs.mpandroidchart)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 
     implementation(libs.apache.lang3)
 
     implementation(libs.hilt)
-    implementation("org.jsoup:jsoup:1.18.1")
-    kapt(libs.hilt.compiler)
+    implementation(libs.jsoup)
+    ksp(libs.hilt.compiler)
 
     implementation(projects.innertube)
     implementation(projects.kugou)

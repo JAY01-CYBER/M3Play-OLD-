@@ -210,7 +210,7 @@
     <string name="sleep_timer">Sleep timer</string>
     <string name="end_of_song">End of song</string>
     <plurals name="minute">
-        <item quantity="one">1 minute</item>
+        <item quantity="one">%d minute</item>
         <item quantity="few">%d minutes</item>
         <item quantity="other">%d minutes</item>
     </plurals>
@@ -396,7 +396,7 @@
     <string name="corner_radius_label">Corner radius: %1$s</string>
     <string name="unmute">Unmute</string>
     <plurals name="seconds">
-        <item quantity="one">1 second</item>
+        <item quantity="one">%d second</item>
         <item quantity="few">%d seconds</item>
         <item quantity="other">%d seconds</item>
     </plurals>

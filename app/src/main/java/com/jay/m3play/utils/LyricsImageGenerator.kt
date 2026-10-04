@@ -26,8 +26,10 @@ import androidx.core.content.FileProvider
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withTranslation
-import coil.ImageLoader
-import coil.request.ImageRequest
+import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.asDrawable
+import coil3.request.allowHardware
 import com.jay.m3play.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -309,7 +311,7 @@ object ComposeToImage {
                 .allowHardware(false)
                 .build()
             val result = imageLoader.execute(request)
-            result.drawable?.toBitmap(800, 800, Bitmap.Config.ARGB_8888)
+            result.image?.asDrawable(context.resources)?.toBitmap(800, 800, Bitmap.Config.ARGB_8888)
         } catch (e: Exception) {
             e.printStackTrace()
             null

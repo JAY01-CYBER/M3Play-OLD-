@@ -147,9 +147,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
-import coil.imageLoader
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.asDrawable
+import coil3.request.allowHardware
+import coil3.request.crossfade
+import coil3.request.error
+import coil3.request.placeholder
 import com.jay.innertube.YouTube
 import com.jay.innertube.models.SongItem
 import com.jay.innertube.models.WatchEndpoint
@@ -339,7 +344,7 @@ class MainActivity : ComponentActivity() {
                                     .allowHardware(false)
                                     .build()
                             )
-                            (result.drawable as? BitmapDrawable)?.bitmap?.extractThemeColor() ?: DefaultThemeColor
+                            (result.image?.asDrawable(resources) as? BitmapDrawable)?.bitmap?.extractThemeColor() ?: DefaultThemeColor
                         }
                     } else {
                         DefaultThemeColor

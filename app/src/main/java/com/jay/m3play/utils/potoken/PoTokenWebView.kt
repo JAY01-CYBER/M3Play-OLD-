@@ -1,6 +1,7 @@
 package com.jay.m3play.utils.potoken
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.webkit.ConsoleMessage
 import android.webkit.JavascriptInterface
@@ -46,7 +47,9 @@ class PoTokenWebView private constructor(
         val webViewSettings = webView.settings
         //noinspection SetJavaScriptEnabled we want to use JavaScript!
         webViewSettings.javaScriptEnabled = true
-        webViewSettings.safeBrowsingEnabled = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            webViewSettings.safeBrowsingEnabled = false
+        }
         webViewSettings.userAgentString = USER_AGENT
         webViewSettings.blockNetworkLoads = true // the WebView does not need internet access
 

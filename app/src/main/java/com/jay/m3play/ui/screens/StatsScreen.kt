@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
@@ -96,6 +97,7 @@ fun StatsScreen(
     val playerConnection = LocalPlayerConnection.current ?: return
     val isPlaying by playerConnection.isPlaying.collectAsState()
     val mediaMetadata by playerConnection.mediaMetadata.collectAsState()
+    val resources = LocalResources.current
     val context = LocalContext.current
 
     val indexChips by viewModel.indexChips.collectAsState()
@@ -426,7 +428,7 @@ fun StatsScreen(
                 onClick = {
                     playerConnection.playQueue(
                         ListQueue(
-                            title = context.getString(R.string.most_played_songs),
+                            title = resources.getString(R.string.most_played_songs),
                             items = mostPlayedSongs.map { it.toMediaMetadata().toMediaItem() }
                                 .shuffled()
                         )

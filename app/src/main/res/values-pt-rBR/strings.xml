@@ -221,7 +221,7 @@
     <string name="sleep_timer">Temporizador de sono</string>
     <string name="end_of_song">Fim da música</string>
     <plurals name="minute">
-        <item quantity="one">1 minuto</item>
+        <item quantity="one">%d minuto</item>
         <item quantity="other">%d minutos</item>
     </plurals>
     <string name="error_no_stream">Nenhum fluxo disponível</string>
@@ -425,7 +425,7 @@
     <string name="corner_radius_label">Raio de canto: %1$s</string>
     <string name="unmute">Desmutar</string>
     <plurals name="seconds">
-        <item quantity="one">1 segundo</item>
+        <item quantity="one">%d segundo</item>
         <item quantity="other">%d segundos</item>
     </plurals>
     <string name="mute">Silenciar</string>

@@ -68,9 +68,11 @@ import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
 import androidx.media3.exoplayer.offline.Download.STATE_DOWNLOADING
 import androidx.media3.exoplayer.offline.Download.STATE_QUEUED
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
+import coil3.request.ImageRequest
+import coil3.asDrawable
+import coil3.request.allowHardware
 import com.jay.innertube.YouTube
 import com.jay.innertube.models.AlbumItem
 import com.jay.innertube.models.ArtistItem
@@ -840,6 +842,7 @@ fun AlbumListItem(
         ),
     badges = badges,
     thumbnailContent = {
+        val context = LocalContext.current
         val database = LocalDatabase.current
         val coroutineScope = rememberCoroutineScope()
 
@@ -854,7 +857,7 @@ fun AlbumListItem(
             onState = { state ->
                 if (album.album.themeColor == null && state is AsyncImagePainter.State.Success) {
                     coroutineScope.launch(Dispatchers.IO) {
-                        state.result.drawable.toBitmapOrNull()?.extractThemeColor()?.toArgb()
+                        state.result.image.asDrawable(context.resources).toBitmapOrNull()?.extractThemeColor()?.toArgb()
                             ?.let { color ->
                                 database.query {
                                     update(album.album.copy(themeColor = color))

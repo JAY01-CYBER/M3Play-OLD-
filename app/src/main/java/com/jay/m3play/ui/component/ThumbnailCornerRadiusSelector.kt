@@ -63,7 +63,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.jay.m3play.LocalPlayerConnection
 import com.jay.m3play.R
 import kotlinx.coroutines.CoroutineScope

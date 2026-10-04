@@ -47,7 +47,7 @@ import androidx.core.net.toUri
 import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.jay.innertube.YouTube
 import com.jay.innertube.models.PlaylistItem
 import com.jay.innertube.models.SongItem

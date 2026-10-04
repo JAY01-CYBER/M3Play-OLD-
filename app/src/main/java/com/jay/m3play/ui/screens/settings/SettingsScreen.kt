@@ -82,8 +82,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.jay.innertube.utils.parseCookieString
 import com.jay.m3play.BuildConfig
 import com.jay.m3play.LocalPlayerAwareWindowInsets

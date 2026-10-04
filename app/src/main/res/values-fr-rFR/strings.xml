@@ -413,7 +413,7 @@
     <string name="corner_radius_label">"Rayon d'angle : %1$s"</string>
     <string name="unmute">"Activer le son"</string>
     <plurals name="seconds">
-        <item quantity="one">"1 seconde"</item>
+        <item quantity="one">"%d seconde"</item>
         <item quantity="many">"%d secondes"</item>
         <item quantity="other">"%d secondes"</item>
     </plurals>
@@ -574,7 +574,6 @@
     <string name="details_desc"></string>
     <string name="equalizer_desc"></string>
     <string name="advanced_desc"></string>
-    <string name="check_out_album_share"></string>
     <string name="album_text"></string>
     <string name="by_text"></string>
     <string name="more"></string>

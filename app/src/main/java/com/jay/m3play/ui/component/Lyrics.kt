@@ -123,7 +123,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.jay.m3play.LocalDatabase
 import com.jay.m3play.LocalPlayerConnection
 import com.jay.m3play.R
@@ -1192,8 +1192,10 @@ fun Lyrics(
                 when (sliderStyle) {
                     SliderStyle.DEFAULT -> {
                         Slider(
-                            value = (sliderPosition ?: position).toFloat(),
-                            valueRange = 0f..(if (duration == C.TIME_UNSET) 0f else duration.toFloat()),
+                            state = rememberPlayerSliderState(
+                                value = (sliderPosition ?: position).toFloat(),
+                                valueRange = 0f..(if (duration == C.TIME_UNSET) 0f else duration.toFloat()),
+                            ),
                             onValueChange = { sliderPosition = it.toLong() },
                             onValueChangeFinished = {
                                 sliderPosition?.let {
@@ -1237,8 +1239,10 @@ fun Lyrics(
 
                     SliderStyle.SLIM -> {
                         Slider(
-                            value = (sliderPosition ?: position).toFloat(),
-                            valueRange = 0f..(if (duration == C.TIME_UNSET) 0f else duration.toFloat()),
+                            state = rememberPlayerSliderState(
+                                value = (sliderPosition ?: position).toFloat(),
+                                valueRange = 0f..(if (duration == C.TIME_UNSET) 0f else duration.toFloat()),
+                            ),
                             onValueChange = { sliderPosition = it.toLong() },
                             onValueChangeFinished = {
                                 sliderPosition?.let {

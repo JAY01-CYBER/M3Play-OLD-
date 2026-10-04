@@ -64,6 +64,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -76,8 +77,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import coil3.request.error
+import coil3.request.placeholder
 import com.jay.m3play.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -258,6 +262,7 @@ data class AvatarUiState(
 fun AvatarSelector(
     modifier: Modifier = Modifier
 ) {
+    val resources = LocalResources.current
     val context = LocalContext.current
     val avatarManager = remember { AvatarPreferenceManager(context) }
     val currentSelection by avatarManager.getAvatarSelection.collectAsState(initial = AvatarSelection.Default)
@@ -289,7 +294,7 @@ fun AvatarSelector(
                     },
                     onFailure = { exception ->
                         uiState = uiState.copy(
-                            error = context.getString(R.string.error_saving_image),
+                            error = resources.getString(R.string.error_saving_image),
                             isLoading = false
                         )
                         Log.e("AvatarSelector", "Error saving image", exception)

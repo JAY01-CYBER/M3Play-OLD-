@@ -22,10 +22,13 @@ import android.os.Build
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.datastore.preferences.core.edit
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.disk.DiskCache
-import coil.request.CachePolicy
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
+import coil3.disk.DiskCache
+import coil3.request.CachePolicy
+import coil3.request.allowHardware
+import coil3.request.crossfade
+import okio.Path.Companion.toOkioPath
 
 import com.jay.innertube.YouTube
 import com.jay.innertube.models.YouTubeLocale
@@ -68,7 +71,7 @@ import java.net.Proxy
 import java.util.Locale
 
 @HiltAndroidApp
-class App : Application(), ImageLoaderFactory {
+class App : Application(), SingletonImageLoader.Factory {
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
@@ -173,14 +176,13 @@ class App : Application(), ImageLoaderFactory {
         }
     }
 
-    override fun newImageLoader(): ImageLoader {
+    override fun newImageLoader(context: Context): ImageLoader {
         // Safe read from DataStore with fallback
         val cacheSize = try { runBlocking { dataStore.data.first()[MaxImageCacheSizeKey] ?: 512 } } catch (e: Exception) { 512 }
 
         if (cacheSize == 0) {
             return ImageLoader.Builder(this)
                 .crossfade(true)
-                .respectCacheHeaders(false)
                 .allowHardware(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 .diskCachePolicy(CachePolicy.DISABLED)
                 .build()
@@ -188,12 +190,11 @@ class App : Application(), ImageLoaderFactory {
 
         return ImageLoader.Builder(this)
             .crossfade(true)
-            .respectCacheHeaders(false)
             .allowHardware(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             .diskCache(
                 try {
                     DiskCache.Builder()
-                        .directory(cacheDir.resolve("coil"))
+                        .directory(cacheDir.resolve("coil").toOkioPath())
                         .maxSizeBytes((cacheSize) * 1024 * 1024L)
                         .build()
                 } catch (e: Exception) {
@@ -202,7 +203,7 @@ class App : Application(), ImageLoaderFactory {
                     // folder ko safely delete karke naya bana lega!
                     try { cacheDir.resolve("coil").deleteRecursively() } catch (ex: Exception) {}
                     DiskCache.Builder()
-                        .directory(cacheDir.resolve("coil"))
+                        .directory(cacheDir.resolve("coil").toOkioPath())
                         .maxSizeBytes((cacheSize) * 1024 * 1024L)
                         .build()
                 }

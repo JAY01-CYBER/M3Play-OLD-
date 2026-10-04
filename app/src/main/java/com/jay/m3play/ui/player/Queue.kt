@@ -84,6 +84,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
@@ -138,6 +139,7 @@ fun Queue(
     onBackgroundColor: Color,
     textBackgroundColor: Color,
 ) {
+    val resources = LocalResources.current
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val clipboardManager = LocalClipboardManager.current
@@ -406,11 +408,11 @@ fun Queue(
                                                 val snackbarResult =
                                                     snackbarHostState.showSnackbar(
                                                         message =
-                                                            context.getString(
+                                                            resources.getString(
                                                                 R.string.removed_song_from_playlist,
                                                                 currentItem.mediaItem.metadata?.title,
                                                             ),
-                                                        actionLabel = context.getString(R.string.undo),
+                                                        actionLabel = resources.getString(R.string.undo),
                                                         duration = SnackbarDuration.Short,
                                                     )
                                                 if (snackbarResult == SnackbarResult.ActionPerformed) {

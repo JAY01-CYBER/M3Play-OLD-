@@ -1,6 +1,7 @@
 @file:Suppress("DEPRECATION")
 package com.jay.m3play.ui.player
 
+import com.jay.m3play.ui.component.rememberPlayerSliderState
 import android.content.res.Configuration
 import android.graphics.drawable.BitmapDrawable
 import android.text.format.Formatter
@@ -126,10 +127,13 @@ import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.NavController
 import androidx.palette.graphics.Palette
-import coil.ImageLoader
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import coil.size.Precision
+import coil3.ImageLoader
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.size.Precision
+import coil3.asDrawable
+import coil3.request.allowHardware
+import coil3.request.crossfade
 import com.jay.m3play.LocalDatabase
 import com.jay.m3play.LocalDownloadUtil
 import com.jay.m3play.LocalPlayerConnection
@@ -347,7 +351,7 @@ fun BottomSheetPlayer(
                                 .data(mediaMetadata?.thumbnailUrl)
                                 .allowHardware(false)
                                 .build(),
-                        ).drawable as? BitmapDrawable
+                        ).image?.asDrawable(context.resources) as? BitmapDrawable
                 }.getOrNull()
 
                 result?.bitmap?.let { bitmap ->
@@ -1093,8 +1097,10 @@ fun BottomSheetPlayer(
             when (sliderStyle) {
                 SliderStyle.DEFAULT -> {
                     Slider(
-                        value = (sliderPosition ?: position).toFloat(),
-                        valueRange = 0f..(if (duration == C.TIME_UNSET) 0f else duration.toFloat()),
+                        state = rememberPlayerSliderState(
+                            value = (sliderPosition ?: position).toFloat(),
+                            valueRange = 0f..(if (duration == C.TIME_UNSET) 0f else duration.toFloat()),
+                        ),
                         onValueChange = {
                             sliderPosition = it.toLong()
                         },
@@ -1147,8 +1153,10 @@ fun BottomSheetPlayer(
 
                 SliderStyle.SLIM -> {
                     Slider(
-                        value = (sliderPosition ?: position).toFloat(),
-                        valueRange = 0f..(if (duration == C.TIME_UNSET) 0f else duration.toFloat()),
+                        state = rememberPlayerSliderState(
+                            value = (sliderPosition ?: position).toFloat(),
+                            valueRange = 0f..(if (duration == C.TIME_UNSET) 0f else duration.toFloat()),
+                        ),
                         onValueChange = {
                             sliderPosition = it.toLong()
                         },

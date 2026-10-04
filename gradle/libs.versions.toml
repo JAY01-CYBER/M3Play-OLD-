@@ -1,53 +1,50 @@
 [versions]
-androidGradlePlugin = "8.10.1"
-annotation = "1.9.1"
-json = "20241224"
-kotlin = "2.1.0"
-compose = "1.9.4"
-lifecycle = "2.9.4"
-material3 = "1.5.0-alpha15"
-media3 = "1.8.0"
-room = "2.6.1"
-hilt = "2.55"
-ktor = "3.0.3"
-ksp = "2.1.0-1.0.29"
-kotlinxSerializationJson = "1.8.0"
-okhttp = "5.0.0-alpha.14"
-loggingInterceptor = "5.0.0-alpha.14"
-blurry = "4.0.1"
-materialRipple = "1.10.0"
-roomRuntimeAndroid = "2.7.2"
-extractor = "06b7ae2"
-composeReorderable = "3.0.0"
-uiAndroid = "1.9.2"
-materialIconsExtended = "1.7.6"
-glanceAppwidget = "1.1.1"
-glanceMaterial3 = "1.1.1"
+androidGradlePlugin = "9.4.1"
+annotation = "1.11.0"
+json = "20260814"
+kotlin = "2.4.20"
+lifecycle = "2.11.0"
+material3 = "1.5.0-alpha29"
+media3 = "1.11.1"
+room = "2.8.5"
+hilt = "2.60.1"
+ktor = "3.6.0"
+ksp = "2.3.12"
+kotlinxSerializationJson = "1.11.0"
+okhttp = "5.5.0"
+extractor = "v1.0.0"
+composeReorderable = "3.1.0"
+materialIconsExtended = "1.7.8"
+glanceAppwidget = "1.2.0"
+glanceMaterial3 = "1.2.0"
 graphicsShapes = "1.1.0"
-workRuntimeKtx = "2.9.0"
-constraintlayout = "2.2.1"
-itextg = "5.5.10"
-mpandroidchart = "v3.1.0"
+workRuntimeKtx = "2.12.0"
 
+
+composeBom = "2026.09.00"
+coil = "3.6.3"
 
 [libraries]
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+jsoup = { module = "org.jsoup:jsoup", version = "1.23.2" }
+errorprone-annotations = { module = "com.google.errorprone:error_prone_annotations", version = "2.50.0" }
 annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
-guava = { group = "com.google.guava", name = "guava", version = "33.4.0-android" }
-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version = "1.10.1" }
+guava = { group = "com.google.guava", name = "guava", version = "33.7.2-android" }
+coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version = "1.11.0" }
 concurrent-futures = { group = "androidx.concurrent", name = "concurrent-futures-ktx", version = "1.3.0" }
 
-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
-activity = { group = "androidx.activity", name = "activity-compose", version = "1.10.0" }
-navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.9.6" }
-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.3.0" }
-datastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.2.0" }
+activity = { group = "androidx.activity", name = "activity-compose", version = "1.13.0" }
+navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.10.2" }
+hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.4.0" }
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.2.1" }
 
-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version = "1.10.0" }
-compose-ui = { group = "androidx.compose.ui", name = "ui", version = "compose" }
-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util", version.ref = "compose" }
-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
-compose-animation = { group = "androidx.compose.animation", name = "animation-graphics", version.ref = "compose" }
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-animation = { group = "androidx.compose.animation", name = "animation-graphics" }
 compose-reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "composeReorderable" }
 
 
@@ -58,9 +55,9 @@ viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-
 
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
-coil = { group = "io.coil-kt", name = "coil-compose", version = "2.7.0" }
+coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 
-shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version = "1.3.1" }
+shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version = "1.5.0" }
 
 palette = { group = "androidx.palette", name = "palette", version = "1.0.0" }
 
@@ -72,9 +69,9 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
-apache-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
+apache-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.21.0" }
 
-hilt = { group = "com.google.dagger", name = "hilt-android", version = "2.53.1" }
+hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
@@ -88,7 +85,7 @@ json = { module = "org.json:json", version.ref = "json" }
 
 brotli = { group = "org.brotli", name = "dec", version = "0.1.2" }
 
-desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.4" }
+desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.5" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 
@@ -97,21 +94,17 @@ timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" 
 newpipe-extractor = { module = "com.github.mostafaalagamy:MetrolistExtractor", version.ref = "extractor" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
-blurry = { group = "jp.wasabeef", name = "blurry", version.ref = "blurry" }
-material-ripple = { group = "androidx.compose.material", name = "material-ripple", version.ref = "materialRipple" }
-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+material-ripple = { group = "androidx.compose.material", name = "material-ripple" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glanceAppwidget" }
 glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glanceMaterial3" }
 graphics-shapes = { group = "androidx.graphics", name = "graphics-shapes", version.ref = "graphicsShapes" }
 work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-itextg = { group = "com.itextpdf", name = "itextg", version.ref = "itextg" }
-mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
