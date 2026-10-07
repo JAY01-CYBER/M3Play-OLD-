@@ -66,6 +66,8 @@ import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.jay.innertube.models.AlbumItem
+import com.jay.innertube.models.PodcastItem
+import com.jay.innertube.models.EpisodeItem
 import com.jay.innertube.models.ArtistItem
 import com.jay.innertube.models.PlaylistItem
 import com.jay.innertube.models.SongItem
@@ -880,6 +882,14 @@ fun HomeScreen(
                                 }
 
                                 is PlaylistItem -> luckyItem.playEndpoint?.let {
+                                    playerConnection.playQueue(YouTubeQueue(it))
+                                }
+
+                                is EpisodeItem -> playerConnection.playQueue(
+                                    YouTubeQueue(luckyItem.asSongItem().toMediaMetadata())
+                                )
+
+                                is PodcastItem -> luckyItem.playEndpoint?.let {
                                     playerConnection.playQueue(YouTubeQueue(it))
                                 }
                             }
