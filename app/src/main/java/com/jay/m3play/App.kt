@@ -54,6 +54,7 @@ import com.jay.m3play.extensions.toEnum
 import com.jay.m3play.extensions.toInetSocketAddress
 import com.jay.m3play.utils.dataStore
 import com.jay.m3play.utils.get
+import com.jay.m3play.utils.installGlobalLogging
 import com.jay.m3play.utils.reportException
 
 import dagger.hilt.android.HiltAndroidApp
@@ -78,6 +79,7 @@ class App : Application(), SingletonImageLoader.Factory {
         super.onCreate()
         instance = this
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+        installGlobalLogging()
         installCrashLogger()
 
         applicationScope.launch(Dispatchers.IO) {
