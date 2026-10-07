@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Bottom navigation -->
+    <string name="home">"nhà"</string>
+    <string name="songs">"Bài hát"</string>
+    <string name="artists">"Nghệ sĩ"</string>
+    <string name="albums">"Album"</string>
+    <string name="playlists">"Danh sách phát"</string>
+
+    <!-- Top bar -->
+    <!-- Home -->
+    <string name="history">"lịch sử"</string>
+    <string name="stats">"thống kê"</string>
+    <string name="account">"tài khoản"</string>
+
+    <!-- History -->
+    <string name="today">"Hôm nay"</string>
+    <string name="yesterday">"Hôm qua"</string>
+
+    <!-- Stats -->
+    <string name="weeks">"Tuần"</string>
+    <string name="months">"Tháng"</string>
+    <string name="years">"Tuổi"</string>
+    <string name="continuous">"liên tục"</string>
+
+    <!-- Search -->
+    <string name="search">"tìm kiếm"</string>
+
+    <!-- Artist screen -->
+
+    <!-- Album screen -->
+
+    <!-- Library -->
+    <string name="liked">"Thích"</string>
+    <string name="offline">"ngoại tuyến"</string>
+    <!-- Playlist -->
+
+    <!-- Button -->
+    <string name="radio">"Radio"</string>
+    <string name="shuffle">"Shuffle"</string>
+    <string name="reset">"Reset"</string>
+
+    <!-- Menu -->
+    <string name="details">"Chi tiết"</string>
+    <string name="edit">"biên tập"</string>
+    <string name="play">"chơi"</string>
+    <string name="download">"tải xuống"</string>
+    <string name="downloading">"Tải"</string>
+    <string name="refetch">"tìm nạp lại"</string>
+    <string name="share">"chia sẻ"</string>
+    <string name="delete">"xóa"</string>
+    <string name="sync">"Sync"</string>
+    <string name="advanced">"tiên tiến"</string>
+    <string name="select">"lựa"</string>
+
+    <!-- Sort menu -->
+
+    <!-- Dialog -->
+    <string name="codecs">"Codec"</string>
+    <string name="bitrate">"Tốc độ bit"</string>
+    <string name="loudness">"Độ ồn"</string>
+    <string name="volume">"âm lượng"</string>
+    <string name="unknown">"không biết"</string>
+    <string name="copied">"Sao chép"</string>
+    <string name="lyrics">"lời"</string>
+    <string name="save">"cứu"</string>
+    <string name="duplicates">"Duplicates"</string>
+
+    <!-- Noun -->
+    <plurals name="n_song">
+        <item quantity="other">"n_song"</item>
+    </plurals>
+    <plurals name="n_artist">
+        <item quantity="other">"n_artist"</item>
+    </plurals>
+    <plurals name="n_album">
+        <item quantity="other">"n_album"</item>
+    </plurals>
+    <plurals name="n_playlist">
+        <item quantity="other">"n_playlist"</item>
+    </plurals>
+    <plurals name="n_week">
+        <item quantity="other">"n_week"</item>
+    </plurals>
+    <plurals name="n_month">
+        <item quantity="other">"n_month"</item>
+    </plurals>
+    <plurals name="n_year">
+        <item quantity="other">"n_year"</item>
+    </plurals>
+    <plurals name="n_time">
+        <item quantity="other">"n_time"</item>
+    </plurals>
+
+    <!-- Snackbar -->
+    <string name="undo">"hoàn tác"</string>
+
+    <!-- Player -->
+    <plurals name="minute">
+        <item quantity="other">"phút"</item>
+    </plurals>
+    <!-- Player action -->
+
+    <!-- Queue Title -->
+
+    <!-- Notification name -->
+
+    <!-- Settings -->
+    <string name="settings">"Cài đặt"</string>
+    <string name="appearance">"bề ngoài"</string>
+    <string name="theme">"đề tài"</string>
+    <string name="gradient">"Gradient"</string>
+    <string name="player">"cầu thủ"</string>
+    <string name="sided">"Mặt"</string>
+    <string name="left">"Bên trái"</string>
+    <string name="center">"trung tâm"</string>
+    <string name="right">"Bên phải"</string>
+    <string name="small">"nhỏ"</string>
+    <string name="big">"lớn"</string>
+    <string name="default_">"Mặc định_"</string>
+    <string name="squiggly">"nguệch ngoạc"</string>
+    <string name="slim">"mỏng"</string>
+    <string name="misc">"Misc"</string>
+    <string name="content">"nội dung"</string>
+    <string name="google">"Google"</string>
+    <string name="discord">"bất hòa"</string>
+    <string name="login">"Đăng nhập"</string>
+    <string name="logout">"Đăng xuất"</string>
+    <string name="general">"Tổng quát"</string>
+    <string name="proxy">"Proxy"</string>
+    <string name="queue">"hàng"</string>
+    <string name="equalizer">"Equalizer"</string>
+    <string name="storage">"bộ nhớ"</string>
+    <string name="unlimited">"vô hạn"</string>
+    <string name="privacy">"sự riêng tư"</string>
+    <string name="backup">"Sao lưu"</string>
+    <string name="restore">"khôi phục"</string>
+    <string name="dismiss">"bỏ"</string>
+    <string name="options">"Tùy chọn"</string>
+    <string name="preview">"Download"</string>
+    <string name="about">"về"</string>
+    <string name="Donate">"Góp"</string>
+    <string name="Telegramchanel">"Điện tínchanel"</string>
+    <string name="NewVersion">"Phiên bản mới"</string>
+    <string name="Changelog">"Nhật ký thay đổi"</string>
+    <string name="changelogs">"nhật ký thay đổi"</string>
+    <string name="Translate">"Dịch"</string>
+    <plurals name="seconds">
+        <item quantity="other">"Giây"</item>
+    </plurals>
+    <string name="explore">"khám phá"</string>
+    <string name="SearchResutls">"Tìm kiếmResutls"</string>
+    <string name="SearchHistory">"Lịch sử tìm kiếm"</string>
+    <string name="collapse">"sụp đổ"</string>
+    <string name="expand">"mở rộng"</string>
+    <string name="custom">"phong tục"</string>
+    <string name="close">"đóng"</string>
+    <string name="cancel">"hủy"</string>
+    <string name="apply">"áp dụng"</string>
+    <string name="downloadingup">"Tải về"</string>
+    <string name="install">"cài đặt"</string>
+    <string name="backup_description">"Cree una copia de seguridad de sus datos actuales."</string>
+    <string name="restore_description">"Recupere sus datos desde una copia de seguridad."</string>
+    <string name="keep_listening">"seguir_escucha"</string>
+    <string name="link_copied">"link_copiado"</string>
+</resources>

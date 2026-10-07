@@ -1,0 +1,188 @@
+@file:Suppress("UnstableApiUsage")
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.compose.compiler)
+}
+
+android {
+    namespace = "com.jay.m3play"
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 2
+        }
+    }
+    buildToolsVersion = "37.0.0"
+
+    defaultConfig {
+        applicationId = "com.jay.m3play"
+        minSdk = 24
+        targetSdk = 37
+        versionCode = 2
+        versionName = "1.0.1"
+ 
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            if (System.getenv("MUSIC_DEBUG_SIGNING_STORE_PASSWORD") != null) {
+                storeFile = file(System.getenv("MUSIC_DEBUG_KEYSTORE_FILE") ?: "debug.keystore")
+                storePassword = System.getenv("MUSIC_DEBUG_SIGNING_STORE_PASSWORD")
+                keyAlias = System.getenv("MUSIC_DEBUG_SIGNING_KEY_ALIAS") 
+                    ?: "androiddebugkey"
+                keyPassword = System.getenv("MUSIC_DEBUG_SIGNING_KEY_PASSWORD")
+            }
+        }
+
+        create("release") {
+            val keystorePath = System.getenv("RELEASE_STORE_FILE") ?: "release.jks"
+            storeFile = file(keystorePath)
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isCrunchPngs = false
+           
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+
+        debug {
+            applicationIdSuffix = ".debug"
+        }
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/NOTICE.md"
+            excludes += "META-INF/CONTRIBUTORS.md"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/io.netty.versions.properties"
+        }
+    }
+
+    bundle {
+        language { enableSplit = false }
+    }
+
+    buildFeatures {
+        buildConfig = true
+        compose = true
+    }
+
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
+    }
+
+    lint {
+        disable += "MissingTranslation"
+    }
+
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+
+composeCompiler {
+    if (providers.gradleProperty("enableComposeCompilerReports").orNull == "true") {
+        reportsDestination = layout.buildDirectory.dir("compose_metrics")
+        metricsDestination = layout.buildDirectory.dir("compose_metrics")
+    }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+dependencies {
+    testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
+    implementation(libs.guava)
+    implementation(libs.coroutines.guava)
+    implementation(libs.concurrent.futures)
+
+    implementation(libs.activity)
+    implementation(libs.navigation)
+    implementation(libs.hilt.navigation)
+    implementation(libs.datastore)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.runtime)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.util)
+    debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.animation)
+    implementation(libs.compose.reorderable)
+
+    implementation(libs.viewmodel)
+    implementation(libs.viewmodel.compose)
+    implementation(libs.lifecycle.runtime.compose)
+
+    implementation(libs.material3)
+    implementation(libs.palette)
+    implementation(projects.materialColorUtilities)
+
+    implementation(libs.coil)
+    implementation(libs.coil.network)
+    implementation(libs.shimmer)
+
+    implementation(libs.media3)
+    implementation(libs.media3.session)
+    implementation(libs.media3.okhttp)
+
+    implementation(libs.room.runtime)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.material.ripple)
+    implementation(libs.glance.appwidget)
+    implementation(libs.glance.material3)
+    implementation(libs.graphics.shapes)
+    implementation(libs.work.runtime.ktx)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    implementation(libs.apache.lang3)
+
+    implementation(libs.hilt)
+    implementation(libs.jsoup)
+    ksp(libs.hilt.compiler)
+
+    implementation(projects.innertube)
+    implementation(projects.kugou)
+    implementation(projects.lrclib)
+    implementation(projects.kizzy)
+    implementation(project(":jossredconnect"))
+
+    implementation(libs.ktor.client.core)
+
+    coreLibraryDesugaring(libs.desugaring)
+
+    implementation(libs.timber)
+}

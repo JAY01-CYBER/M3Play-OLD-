@@ -1,0 +1,128 @@
+/*
+ * This file is part of M3 Play.
+ * License information: see LICENSE in the repository root.
+ * Copyright and authorship: see Git history and any notices below.
+ */
+
+package com.jay.m3play.utils
+
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import androidx.compose.ui.hapticfeedback.HapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import com.jay.m3play.constants.HapticsEnabledKey
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+
+object Haptics {
+
+    private var isHapticsEnabled = true
+    private var observerJob: Job? = null
+
+    private fun ensureObserving(context: Context) {
+        if (observerJob == null) {
+            observerJob = CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    context.dataStore.data.collect { prefs ->
+                        isHapticsEnabled = prefs[HapticsEnabledKey] ?: true
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    fun click(haptic: HapticFeedback? = null, context: Context? = null) {
+        context?.let { ensureObserving(it.applicationContext) }
+        
+        if (context != null && !isHapticsEnabled) return
+
+        haptic?.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            ?: context?.let { vibrate(it, 12L, 80) }
+    }
+
+    fun tick(haptic: HapticFeedback? = null, context: Context? = null) {
+        context?.let { ensureObserving(it.applicationContext) }
+        
+        if (context != null && !isHapticsEnabled) return
+
+        haptic?.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            ?: context?.let { vibrate(it, 8L, 60) }
+    }
+
+    fun longPress(haptic: HapticFeedback? = null, context: Context? = null) {
+        context?.let { ensureObserving(it.applicationContext) }
+        
+        if (context != null && !isHapticsEnabled) return
+
+        haptic?.performHapticFeedback(HapticFeedbackType.LongPress)
+            ?: context?.let { vibrate(it, 43L, 120) }
+    }
+
+    // Yahan maine 'context' ko pehla parameter bana diya hai. 
+    // Ab Player.kt ka Haptics.success(context) call perfectly match ho jayega!
+    fun success(context: Context? = null, haptic: HapticFeedback? = null) {
+        context?.let { ensureObserving(it.applicationContext) }
+        
+        if (context != null && !isHapticsEnabled) return
+
+        context?.let { 
+            waveform(
+                it, 
+                longArrayOf(0, 35, 40, 35, 40, 45), 
+                intArrayOf(0, 220, 0, 180, 0, 255)
+            ) 
+        }
+    }
+
+    private fun waveform(
+        context: Context,
+        timings: LongArray,
+        amplitudes: IntArray
+    ) {
+        val vibrator = getVibrator(context) ?: return
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1))
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator.vibrate(timings.sum())
+        }
+    }
+
+    private fun vibrate(
+        context: Context,
+        duration: Long,
+        amplitude: Int
+    ) {
+        val vibrator = getVibrator(context) ?: return
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    duration,
+                    amplitude.coerceIn(1, 255)
+                )
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator.vibrate(duration)
+        }
+    }
+
+    private fun getVibrator(context: Context): Vibrator? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val manager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
+            manager?.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+        }
+    }
+}
