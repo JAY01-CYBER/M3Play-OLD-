@@ -123,6 +123,7 @@ import com.jay.m3play.utils.dataStore
 import com.jay.m3play.utils.enumPreference
 import com.jay.m3play.utils.get
 import com.jay.m3play.utils.reportException
+import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.MoreExecutors
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -303,6 +304,22 @@ class MusicService :
                         PendingIntent.FLAG_IMMUTABLE,
                     ),
                 ).setBitmapLoader(CoilBitmapLoader(this, scope))
+                .setMediaButtonPreferences(
+                    ImmutableList.of(
+                        CommandButton
+                            .Builder(CommandButton.ICON_PREVIOUS)
+                            .setDisplayName("Previous")
+                            .setPlayerCommand(Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM)
+                            .setSlots(CommandButton.SLOT_BACK)
+                            .build(),
+                        CommandButton
+                            .Builder(CommandButton.ICON_NEXT)
+                            .setDisplayName("Next")
+                            .setPlayerCommand(Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM)
+                            .setSlots(CommandButton.SLOT_FORWARD)
+                            .build(),
+                    )
+                )
                 .build()
         player.repeatMode = dataStore.get(RepeatModeKey, REPEAT_MODE_OFF)
 

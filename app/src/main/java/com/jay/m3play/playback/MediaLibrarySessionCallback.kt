@@ -29,6 +29,7 @@ import com.jay.m3play.db.MusicDatabase
 import com.jay.m3play.db.entities.PlaylistEntity
 import com.jay.m3play.db.entities.Song
 import com.jay.m3play.extensions.toMediaItem
+import com.jay.m3play.ui.utils.resize
 import com.jay.m3play.extensions.toggleRepeatMode
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
@@ -306,7 +307,7 @@ constructor(
                                                 .setTitle(song.title)
                                                 .setSubtitle(song.artists.joinToString { it.name })
                                                 .setArtist(song.artists.joinToString { it.name })
-                                                .setArtworkUri(song.thumbnail.toUri())
+                                                .setArtworkUri(song.thumbnail.resize(1200, 1200).toUri())
                                                 .setIsPlayable(true)
                                                 .setIsBrowsable(false)
                                                 .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
@@ -444,7 +445,7 @@ constructor(
                                     .setTitle(song.title)
                                     .setSubtitle(song.artists.joinToString { it.name })
                                     .setArtist(song.artists.joinToString { it.name })
-                                    .setArtworkUri(song.thumbnail.toUri())
+                                    .setArtworkUri(song.thumbnail.resize(1200, 1200).toUri())
                                     .setIsPlayable(true)
                                     .setIsBrowsable(false)
                                     .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
@@ -505,7 +506,7 @@ constructor(
                     .setTitle(song.title)
                     .setSubtitle(artists.joinToString { it.name })
                     .setArtist(artists.joinToString { it.name })
-                    .setArtworkUri(song.thumbnailUrl?.toUri())
+                    .setArtworkUri(song.thumbnailUrl?.resize(1200, 1200)?.toUri())
                     .setIsPlayable(true)
                     .setIsBrowsable(false)
                     .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
