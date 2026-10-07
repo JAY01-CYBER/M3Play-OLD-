@@ -178,7 +178,7 @@ fun DebugSettings(navController: NavController) {
                     ) {
                         items(
                             items = filteredLogs,
-                            key = { "${it.time}-${it.level}-${it.tag}-${it.message.hashCode()}" },
+                            key = { it.id },
                         ) { entry ->
                             LogEntryItem(entry, clipboard, scope)
                         }
