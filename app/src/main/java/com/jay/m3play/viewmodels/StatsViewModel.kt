@@ -94,7 +94,7 @@ constructor(
             .flatMapLatest { (selection, t) ->
                 database
                     .mostPlayedArtists(
-                        statToPeriod(selection, t),
+                        statToPeriod(selection, t).toLocalDateTime(),
                         limit = -1,
                         toTimeStamp =
                             if (selection == OptionStats.CONTINUOUS || t == 0) {
