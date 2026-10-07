@@ -13,6 +13,7 @@ import com.jay.innertube.models.SongItem
 import com.jay.m3play.db.entities.Song
 import com.jay.m3play.models.MediaMetadata
 import com.jay.m3play.models.toMediaMetadata
+import com.jay.m3play.ui.utils.resize
 
 val MediaItem.metadata: MediaMetadata?
     get() = localConfiguration?.tag as? MediaMetadata
@@ -30,7 +31,7 @@ fun Song.toMediaItem() =
                 .setTitle(song.title)
                 .setSubtitle(artists.joinToString { it.name })
                 .setArtist(artists.joinToString { it.name })
-                .setArtworkUri(song.thumbnailUrl?.toUri())
+                .setArtworkUri(song.thumbnailUrl?.resize(1200, 1200)?.toUri())
                 .setAlbumTitle(song.albumName)
                 .setMediaType(MEDIA_TYPE_MUSIC)
                 .build(),
@@ -49,7 +50,7 @@ fun SongItem.toMediaItem() =
                 .setTitle(title)
                 .setSubtitle(artists.joinToString { it.name })
                 .setArtist(artists.joinToString { it.name })
-                .setArtworkUri(thumbnail.toUri())
+                .setArtworkUri(thumbnail.resize(1200, 1200).toUri())
                 .setAlbumTitle(album?.name)
                 .setMediaType(MEDIA_TYPE_MUSIC)
                 .build(),
@@ -68,7 +69,7 @@ fun MediaMetadata.toMediaItem() =
                 .setTitle(title)
                 .setSubtitle(artists.joinToString { it.name })
                 .setArtist(artists.joinToString { it.name })
-                .setArtworkUri(thumbnailUrl?.toUri())
+                .setArtworkUri(thumbnailUrl?.resize(1200, 1200)?.toUri())
                 .setAlbumTitle(album?.title)
                 .setMediaType(MEDIA_TYPE_MUSIC)
                 .build(),
