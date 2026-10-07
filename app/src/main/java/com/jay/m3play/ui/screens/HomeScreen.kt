@@ -885,9 +885,11 @@ fun HomeScreen(
                                     playerConnection.playQueue(YouTubeQueue(it))
                                 }
 
-                                is EpisodeItem -> playerConnection.playQueue(
-                                    YouTubeQueue(luckyItem.asSongItem().toMediaMetadata())
-                                )
+                                is EpisodeItem -> luckyItem.endpoint?.let {
+                                    playerConnection.playQueue(
+                                        YouTubeQueue(it, luckyItem.asSongItem().toMediaMetadata())
+                                    )
+                                }
 
                                 is PodcastItem -> luckyItem.playEndpoint?.let {
                                     playerConnection.playQueue(YouTubeQueue(it))
