@@ -144,7 +144,6 @@ class MusicDatabase(
         AutoMigration(from = 20, to = 21, spec = Migration20To21::class),
         AutoMigration(from = 21, to = 22, spec = Migration21To22::class),
         AutoMigration(from = 22, to = 23, spec = Migration22To23::class),
-        AutoMigration(from = 23, to = 24, spec = Migration23To24::class),
         AutoMigration(from = 24, to = 25),
         AutoMigration(from = 25, to = 26),
         AutoMigration(from = 26, to = 27),
@@ -204,6 +203,7 @@ abstract class InternalDatabase : RoomDatabase() {
                     MIGRATION_5_6,
                     MIGRATION_21_24,
                     MIGRATION_22_24,
+                    MIGRATION_23_24,
                     MIGRATION_24_25,
                 ).fallbackToDestructiveMigration()
                 .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
@@ -630,6 +630,22 @@ val MIGRATION_21_24 =
             if (!hasIsUploaded) {
                 db.execSQL("ALTER TABLE `song` ADD COLUMN `isUploaded` INTEGER NOT NULL DEFAULT 0")
             }
+
+            // Album also gained isUploaded in schema 24. Older databases may
+            // not have it, so add it before Room validates the 24 schema.
+            var albumHasIsUploaded = false
+            db.query("PRAGMA table_info('album')").use { cursor ->
+                val nameIndex = cursor.getColumnIndex("name")
+                while (cursor.moveToNext()) {
+                    if (nameIndex >= 0 && cursor.getString(nameIndex) == "isUploaded") {
+                        albumHasIsUploaded = true
+                        break
+                    }
+                }
+            }
+            if (!albumHasIsUploaded) {
+                db.execSQL("ALTER TABLE `album` ADD COLUMN `isUploaded` INTEGER NOT NULL DEFAULT 0")
+            }
         }
     }
 
@@ -652,8 +668,43 @@ val MIGRATION_22_24 =
             if (!hasIsUploaded) {
                 db.execSQL("ALTER TABLE `song` ADD COLUMN `isUploaded` INTEGER NOT NULL DEFAULT 0")
             }
+
+            var albumHasIsUploaded = false
+            db.query("PRAGMA table_info('album')").use { cursor ->
+                val nameIndex = cursor.getColumnIndex("name")
+                while (cursor.moveToNext()) {
+                    if (nameIndex >= 0 && cursor.getString(nameIndex) == "isUploaded") {
+                        albumHasIsUploaded = true
+                        break
+                    }
+                }
+            }
+            if (!albumHasIsUploaded) {
+                db.execSQL("ALTER TABLE `album` ADD COLUMN `isUploaded` INTEGER NOT NULL DEFAULT 0")
+            }
         }
     }
+
+val MIGRATION_23_24 = object : Migration(23, 24) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        fun hasColumn(table: String, column: String): Boolean {
+            db.query("PRAGMA table_info(\"$table\")").use { cursor ->
+                val nameIndex = cursor.getColumnIndex("name")
+                while (cursor.moveToNext()) {
+                    if (nameIndex >= 0 && cursor.getString(nameIndex) == column) return true
+                }
+            }
+            return false
+        }
+
+        if (!hasColumn("song", "isUploaded")) {
+            db.execSQL("ALTER TABLE `song` ADD COLUMN `isUploaded` INTEGER NOT NULL DEFAULT 0")
+        }
+        if (!hasColumn("album", "isUploaded")) {
+            db.execSQL("ALTER TABLE `album` ADD COLUMN `isUploaded` INTEGER NOT NULL DEFAULT 0")
+        }
+    }
+}
 
 // ===== AutoMigration Specs =====
 
@@ -812,25 +863,6 @@ class Migration22To23 : AutoMigrationSpec {
     }
 }
 
-class Migration23To24 : AutoMigrationSpec {
-    override fun onPostMigrate(db: SupportSQLiteDatabase) {
-        var hasIsUploaded = false
-        db.query("PRAGMA table_info('song')").use { cursor ->
-            val nameIndex = cursor.getColumnIndex("name")
-            while (cursor.moveToNext()) {
-                val colName = if (nameIndex >= 0) cursor.getString(nameIndex) else null
-                if (colName == "isUploaded") {
-                    hasIsUploaded = true
-                    break
-                }
-            }
-        }
-
-        if (!hasIsUploaded) {
-            db.execSQL("ALTER TABLE `song` ADD COLUMN `isUploaded` INTEGER NOT NULL DEFAULT 0")
-        }
-    }
-}
 
 val MIGRATION_24_25 =
     object : Migration(24, 25) {
