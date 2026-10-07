@@ -453,13 +453,18 @@ class MusicService :
                         }
                     }.onSuccess { queue ->
                         runCatching {
+                            require(queue.items.isNotEmpty()) { "Persisted queue is empty" }
+                            require(queue.mediaItemIndex in queue.items.indices) {
+                                "Invalid persisted queue index: ${queue.mediaItemIndex}/${queue.items.size}"
+                            }
+                            require(queue.position >= 0L) { "Invalid persisted queue position: ${queue.position}" }
                             val restoredQueue = queue.toQueue()
                             withContext(Dispatchers.Main) {
                                 playQueue(queue = restoredQueue, playWhenReady = false)
                             }
                         }.onFailure {
-                            Timber.tag(TAG).w(it, "%s", "Failed to restore persisted queue, clearing data")
-                            clearPersistedQueueFiles()
+                            Timber.tag(TAG).w(it, "%s", "Failed to restore persisted queue, deleting only queue snapshot")
+                            clearPersistedFile(PERSISTENT_QUEUE_FILE)
                         }
                     }.onFailure {
                         Timber.tag(TAG).w(it, "%s", "Failed to read persisted queue, clearing data")
@@ -482,12 +487,12 @@ class MusicService :
                                 automixItems.value = queue.items.map { it.toMediaItem() }
                             }
                         }.onFailure {
-                            Timber.tag(TAG).w(it, "%s", "Failed to map automix queue, clearing data")
-                            clearPersistedQueueFiles()
+                            Timber.tag(TAG).w(it, "%s", "Failed to map automix queue, deleting only automix snapshot")
+                            clearPersistedFile(PERSISTENT_AUTOMIX_FILE)
                         }
                     }.onFailure {
-                        Timber.tag(TAG).w(it, "%s", "Failed to read automix queue, clearing data")
-                        clearPersistedQueueFiles()
+                        Timber.tag(TAG).w(it, "%s", "Failed to read automix queue, deleting only automix snapshot")
+                        clearPersistedFile(PERSISTENT_AUTOMIX_FILE)
                     }
                 }
 
@@ -504,19 +509,20 @@ class MusicService :
                         withContext(Dispatchers.Main) {
                             delay(1000) // Wait for queue to be loaded
                             runCatching {
-                                player.repeatMode = playerState.repeatMode
+                                player.repeatMode = playerState.repeatMode.takeIf { it in REPEAT_MODE_OFF..REPEAT_MODE_ONE } ?: REPEAT_MODE_OFF
                                 player.shuffleModeEnabled = playerState.shuffleModeEnabled
-                                player.volume = playerState.volume
-                                if (player.mediaItemCount > 0 && playerState.currentMediaItemIndex >= 0 && playerState.currentMediaItemIndex < player.mediaItemCount) {
-                                    player.seekTo(playerState.currentMediaItemIndex, playerState.currentPosition)
+                                player.volume = playerState.volume.takeIf { it.isFinite() }?.coerceIn(0f, 1f) ?: 1f
+                                if (player.mediaItemCount > 0 && playerState.currentMediaItemIndex in 0 until player.mediaItemCount) {
+                                    player.seekTo(playerState.currentMediaItemIndex, playerState.currentPosition.coerceAtLeast(0L))
                                 }
+                                player.playWhenReady = playerState.playWhenReady
                             }.onFailure {
                                 Timber.tag(TAG).e(it, "%s", "Seek error, ignoring")
                             }
                         }
                     }.onFailure {
-                        Timber.tag(TAG).w(it, "%s", "State corrupted, deleting file")
-                        clearPersistedQueueFiles()
+                        Timber.tag(TAG).w(it, "%s", "State corrupted, deleting only player-state snapshot")
+                        clearPersistedFile(PERSISTENT_PLAYER_STATE_FILE)
                     }
                 }
             }
@@ -1581,10 +1587,15 @@ class MusicService :
     }
 
     // Corrupt files clean karne ka naya function
+    private fun clearPersistedFile(fileName: String) {
+        runCatching { AtomicFile(filesDir.resolve(fileName)).delete() }
+            .onFailure { Timber.tag(TAG).w(it, "Failed to delete persisted snapshot: $fileName") }
+    }
+
     private fun clearPersistedQueueFiles() {
-        runCatching { filesDir.resolve(PERSISTENT_QUEUE_FILE).delete() }
-        runCatching { filesDir.resolve(PERSISTENT_AUTOMIX_FILE).delete() }
-        runCatching { filesDir.resolve(PERSISTENT_PLAYER_STATE_FILE).delete() }
+        clearPersistedFile(PERSISTENT_QUEUE_FILE)
+        clearPersistedFile(PERSISTENT_AUTOMIX_FILE)
+        clearPersistedFile(PERSISTENT_PLAYER_STATE_FILE)
     }
 
     companion object {
