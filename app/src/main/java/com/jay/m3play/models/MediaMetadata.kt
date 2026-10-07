@@ -73,8 +73,8 @@ fun Song.toMediaMetadata() =
                     title = song.albumName.orEmpty(),
                 )
             },
-        libraryAddToken = song.song.libraryAddToken,
-        libraryRemoveToken = song.song.libraryRemoveToken,
+        libraryAddToken = song.libraryAddToken,
+        libraryRemoveToken = song.libraryRemoveToken,
     )
 
 fun SongItem.toMediaMetadata() =
