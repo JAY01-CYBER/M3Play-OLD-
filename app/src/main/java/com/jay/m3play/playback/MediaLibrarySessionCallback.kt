@@ -222,7 +222,7 @@ constructor(
                                         "${MusicService.YT_PLAYLIST}/${playlist.id}",
                                         playlist.title,
                                         playlist.songCountText,
-                                        playlist.thumbnail.toUri(),
+                                        playlist.thumbnail?.toUri(),
                                         MediaMetadata.MEDIA_TYPE_PLAYLIST,
                                     )
                                 }
