@@ -847,6 +847,11 @@ fun SettingsScreen(
                     onClick = { navController.navigate("settings/about") }
                 ),
                 SettingsCategoryItem(
+                    icon = painterResource(R.drawable.info),
+                    title = { Text("Debug & Logs") },
+                    onClick = { navController.navigate("settings/debug") }
+                ),
+                SettingsCategoryItem(
                     icon = painterResource(R.drawable.translate),
                     title = { Text(stringResource(R.string.Translate)) },
                     onClick = { showTranslateDialog = true }
