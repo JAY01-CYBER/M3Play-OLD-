@@ -178,7 +178,6 @@ fun DebugSettings(navController: NavController) {
                     ) {
                         items(
                             items = filteredLogs,
-                            key = { index, _ -> index },
                         ) { entry ->
                             LogEntryItem(entry, clipboard, scope)
                         }
