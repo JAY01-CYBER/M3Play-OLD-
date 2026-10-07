@@ -21,7 +21,7 @@ fun String.resize(
             return "${split("=w")[0]}=w$w-h$h-p-l90-rj"
         }
     if (this matches "https://yt3\\.ggpht\\.com/.*=s(\\d+)".toRegex()) {
-        return "$this-s${width ?: height}"
+        return this.replace(Regex("=s\\d+"), "=s${width ?: height}")
     }
     return this
 }
