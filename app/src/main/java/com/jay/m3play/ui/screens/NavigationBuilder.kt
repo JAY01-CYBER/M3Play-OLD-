@@ -39,6 +39,7 @@ import com.jay.m3play.ui.screens.settings.BackupAndRestore
 import com.jay.m3play.ui.screens.settings.ContentSettings
 import com.jay.m3play.ui.screens.settings.DiscordLoginScreen
 import com.jay.m3play.ui.screens.settings.DiscordSettings
+import com.jay.m3play.ui.screens.settings.DebugSettings
 import com.jay.m3play.ui.screens.settings.PlayerSettings
 import com.jay.m3play.ui.screens.settings.PrivacySettings
 import com.jay.m3play.ui.screens.settings.SettingsScreen
@@ -281,6 +282,9 @@ fun NavGraphBuilder.navigationBuilder(
     }
     composable("settings/about") {
         AboutScreen(navController, scrollBehavior)
+    }
+    composable("settings/debug") {
+        DebugSettings(navController)
     }
     composable("login") {
         LoginScreen(navController)
