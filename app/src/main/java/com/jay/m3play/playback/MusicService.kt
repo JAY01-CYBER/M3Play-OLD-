@@ -229,6 +229,9 @@ class MusicService :
 
     lateinit var player: ExoPlayer
     private lateinit var mediaSession: MediaLibrarySession
+    // Keep the controller alive for the lifetime of the service so System UI
+    // (Quick Settings / lockscreen) always has a live session connection.
+    private var systemMediaController: MediaController? = null
 
     private var isAudioEffectSessionOpened = false
     private var loudnessEnhancer: LoudnessEnhancer? = null
@@ -323,10 +326,21 @@ class MusicService :
                 .build()
         player.repeatMode = dataStore.get(RepeatModeKey, REPEAT_MODE_OFF)
 
-        // Keep a connected controller so that notification works
+        // Keep a real controller reference for the whole service lifetime.
+        // System UI (Quick Settings / lockscreen) can otherwise lose the session
+        // connection when the temporary future/result is no longer referenced.
         val sessionToken = SessionToken(this, ComponentName(this, MusicService::class.java))
         val controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        controllerFuture.addListener({ controllerFuture.get() }, MoreExecutors.directExecutor())
+        controllerFuture.addListener(
+            {
+                runCatching {
+                    systemMediaController = controllerFuture.get()
+                }.onFailure {
+                    Timber.tag(TAG).w(it, "Could not connect the System UI media controller")
+                }
+            },
+            MoreExecutors.directExecutor(),
+        )
 
         connectivityManager = getSystemService()!!
         connectivityObserver = NetworkConnectivityObserver(this)
@@ -1565,6 +1579,8 @@ class MusicService :
         discordRpc = null
         abandonAudioFocus()
         releaseLoudnessEnhancer()
+        systemMediaController?.release()
+        systemMediaController = null
         mediaSession.release()
         player.removeListener(this)
         player.removeListener(sleepTimer)
@@ -1576,7 +1592,12 @@ class MusicService :
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        stopSelf()
+        // A music service must stay alive while playback is active. Stopping the
+        // service here also destroys the MediaSession, which removes the QS and
+        // lockscreen media controls. Stop only when playback is actually idle.
+        if (!player.isPlaying && player.playbackState == Player.STATE_IDLE) {
+            stopSelf()
+        }
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo) = mediaSession
