@@ -123,3 +123,17 @@
     @kotlinx.serialization.Serializable *;
 }
 
+
+## Crash diagnostics / Java-serialized persistent player state
+# Keep source locations in release stack traces so R8 Compose crashes can be mapped back to source.
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
+# These classes are persisted with java.io.ObjectOutputStream. Keep names, fields and
+# nested sealed/object classes stable across R8 builds.
+-keep class com.jay.m3play.models.PersistQueue { *; }
+-keep class com.jay.m3play.models.PersistQueue$* { *; }
+-keep class com.jay.m3play.models.PersistPlayerState { *; }
+-keep class com.jay.m3play.models.MediaMetadata { *; }
+-keep class com.jay.m3play.models.MediaMetadata$* { *; }
+-keep class com.jay.m3play.playback.QueueSnapshot { *; }
