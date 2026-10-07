@@ -10,6 +10,7 @@ import android.net.ConnectivityManager
 import androidx.media3.common.PlaybackException
 import com.jay.innertube.models.response.PlayerResponse
 import com.jay.innertube.NewPipeUtils
+import com.jay.innertube.NewPipeExtractor
 import com.jay.m3play.constants.AudioQuality
 import com.jay.innertube.YouTube
 import com.jay.innertube.models.YouTubeClient
@@ -109,7 +110,9 @@ object YTPlayerUtils {
         val format: PlayerResponse.StreamingData.Format,
         val url: String,
         val expiresInSeconds: Int,
-    )
+    ) {
+        fun copyUrl(newUrl: String) = Candidate(client, response, format, newUrl, expiresInSeconds)
+    }
 
     /**
      * Every client is tried in order until one yields a stream that actually answers a real range
@@ -168,7 +171,13 @@ object YTPlayerUtils {
                 continue
             }
 
+            // First resolve the URL through the InnerTube response/cipher path.
+            // If YouTube returns a stream that still cannot be resolved or does not answer
+            // a real range request, fall back to NewPipe's stream resolver for the same itag.
+            // This keeps InnerTube as the primary metadata/client source while giving playback
+            // a second, independent URL resolution path when YouTube changes its cipher.
             val url = findUrlOrNull(format, videoId)
+                ?: findNewPipeUrlOrNull(format, videoId)
             if (url == null) {
                 lastProblem = "${client.clientName}: no stream url"
                 continue
@@ -187,9 +196,19 @@ object YTPlayerUtils {
                 winner = candidate
                 Timber.tag(logTag).d("Stream validated with ${client.clientName}")
                 break
-            } else {
-                lastProblem = "${client.clientName}: stream validation failed"
             }
+
+            // The InnerTube URL can be valid syntactically but rejected by googlevideo.
+            // Try a fully resolved NewPipe URL for the exact same format before abandoning
+            // this candidate.
+            val newPipeUrl = findNewPipeUrlOrNull(format, videoId)
+            if (newPipeUrl != null && newPipeUrl != url && validateStatus(newPipeUrl)) {
+                winner = candidate.copyUrl(newPipeUrl)
+                Timber.tag(logTag).d("Stream validated with NewPipe fallback for ${client.clientName}")
+                break
+            }
+
+            lastProblem = "${client.clientName}: stream validation failed"
         }
 
         val chosen = winner ?: firstCandidate
@@ -270,6 +289,21 @@ object YTPlayerUtils {
             false
         }
     }
+    /**
+     * Independent stream URL fallback. NewPipe returns already-resolved URLs, so this is useful
+     * when YouTube changes the signature/throttling parameters on the InnerTube URL.
+     */
+    private fun findNewPipeUrlOrNull(
+        format: PlayerResponse.StreamingData.Format,
+        videoId: String,
+    ): String? = runCatching {
+        NewPipeExtractor.newPipePlayer(videoId)
+            .firstOrNull { (itag, _) -> itag == format.itag }
+            ?.second
+    }.onFailure {
+        Timber.tag(logTag).w(it, "NewPipe stream URL fallback failed")
+    }.getOrNull()
+
     /**
      * Wrapper around the [NewPipeUtils.getSignatureTimestamp] function which reports exceptions
      */
