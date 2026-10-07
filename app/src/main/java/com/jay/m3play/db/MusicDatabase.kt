@@ -142,7 +142,8 @@ class MusicDatabase(
         AutoMigration(from = 18, to = 19, spec = Migration18To19::class),
         
         AutoMigration(from = 20, to = 21, spec = Migration20To21::class),
-        AutoMigration(from = 21, to = 22, spec = Migration21To22::class),
+        // 21 -> 22 is manual because playlist.thumbnailUrl was added in v22
+        // and some existing v21 databases do not contain that column.
         AutoMigration(from = 22, to = 23, spec = Migration22To23::class),
         AutoMigration(from = 24, to = 25),
         AutoMigration(from = 25, to = 26),
@@ -201,6 +202,7 @@ abstract class InternalDatabase : RoomDatabase() {
                     MIGRATION_19_20_COMPAT,
                     MIGRATION_1_2,
                     MIGRATION_5_6,
+                    MIGRATION_21_22,
                     MIGRATION_21_24,
                     MIGRATION_22_24,
                     MIGRATION_23_24,
@@ -832,27 +834,32 @@ class Migration19To20 : AutoMigrationSpec {
 )
 class Migration20To21 : AutoMigrationSpec
 
-class Migration21To22 : AutoMigrationSpec {
-    override fun onPostMigrate(db: SupportSQLiteDatabase) {
-        try {
-            db.execSQL("ALTER TABLE song ADD COLUMN libraryAddToken TEXT DEFAULT ''")
-        } catch (e: Exception) {
-            Timber.tag("Migration21To22").w(e, "Column may already exist")
+val MIGRATION_21_22 = object : Migration(21, 22) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        fun hasColumn(table: String, column: String): Boolean {
+            db.query("PRAGMA table_info(\"$table\")").use { cursor ->
+                val nameIndex = cursor.getColumnIndex("name")
+                while (cursor.moveToNext()) {
+                    if (nameIndex >= 0 && cursor.getString(nameIndex) == column) return true
+                }
+            }
+            return false
         }
-        try {
-            db.execSQL("ALTER TABLE song ADD COLUMN libraryRemoveToken TEXT DEFAULT ''")
-        } catch (e: Exception) {
-            Timber.tag("Migration21To22").w(e, "Column may already exist")
+
+        if (!hasColumn("song", "libraryAddToken")) {
+            db.execSQL("ALTER TABLE `song` ADD COLUMN `libraryAddToken` TEXT DEFAULT ''")
         }
-        try {
-            db.execSQL("ALTER TABLE song ADD COLUMN romanizeLyrics INTEGER NOT NULL DEFAULT 1")
-        } catch (e: Exception) {
-            Timber.tag("Migration21To22").w(e, "Column may already exist")
+        if (!hasColumn("song", "libraryRemoveToken")) {
+            db.execSQL("ALTER TABLE `song` ADD COLUMN `libraryRemoveToken` TEXT DEFAULT ''")
         }
-        try {
-            db.execSQL("ALTER TABLE song ADD COLUMN isDownloaded INTEGER NOT NULL DEFAULT 0")
-        } catch (e: Exception) {
-            Timber.tag("Migration21To22").w(e, "Column may already exist")
+        if (!hasColumn("song", "romanizeLyrics")) {
+            db.execSQL("ALTER TABLE `song` ADD COLUMN `romanizeLyrics` INTEGER NOT NULL DEFAULT 1")
+        }
+        if (!hasColumn("song", "isDownloaded")) {
+            db.execSQL("ALTER TABLE `song` ADD COLUMN `isDownloaded` INTEGER NOT NULL DEFAULT 0")
+        }
+        if (!hasColumn("playlist", "thumbnailUrl")) {
+            db.execSQL("ALTER TABLE `playlist` ADD COLUMN `thumbnailUrl` TEXT DEFAULT NULL")
         }
     }
 }
