@@ -9,6 +9,7 @@ package com.jay.m3play.ui.component
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.content.res.Configuration
 import android.os.Build
 import android.widget.Toast
@@ -27,6 +28,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -125,6 +127,12 @@ import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_ENDED
 import coil3.compose.AsyncImage
+import coil3.asDrawable
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
+import androidx.palette.graphics.Palette
+import com.jay.m3play.ui.theme.PlayerColorExtractor
 import com.jay.m3play.LocalDatabase
 import com.jay.m3play.LocalPlayerConnection
 import com.jay.m3play.R
@@ -135,7 +143,6 @@ import com.jay.m3play.constants.LyricsScrollKey
 import com.jay.m3play.constants.LyricsTextPositionKey
 import com.jay.m3play.constants.PlayerBackgroundStyle
 import com.jay.m3play.constants.PlayerBackgroundStyleKey
-import com.jay.m3play.constants.RotateBackgroundKey
 import com.jay.m3play.constants.SliderStyle
 import com.jay.m3play.constants.SliderStyleKey
 import com.jay.m3play.db.entities.LyricsEntity
@@ -156,11 +163,8 @@ import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.jay.m3play.ui.component.WavyPlayerSlider
-import kotlin.math.exp
-import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.seconds
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.offset
@@ -204,7 +208,7 @@ fun Lyrics(
     val scrollLyrics by rememberPreference(LyricsScrollKey, true)
     val animateLyrics by rememberPreference(AnimateLyricsKey, true)
 
-    val rotateBackground by rememberPreference(RotateBackgroundKey, defaultValue = false)
+    val frostedGlass by rememberPreference(com.jay.m3play.constants.FrostedGlassKey, true)
 
     // Usar mediaMetadata proporcionada o la del playerConnection
     val currentMetadata = mediaMetadata ?: playerConnection.mediaMetadata.collectAsStateWithLifecycle().value
@@ -281,7 +285,20 @@ fun Lyrics(
     )
 
     val playbackProgress by playerConnection.progress.collectAsStateWithLifecycle()
-    val position = playbackProgress.position
+    // Read on the main frame clock only while lyrics are visible and playing.
+    // This follows seeks and playback speed without interpolating across discontinuities.
+    var framePosition by remember(currentSongId) { mutableStateOf<Long?>(null) }
+    LaunchedEffect(currentSongId, isPlaying, animateLyrics, isAppMinimized) {
+        framePosition = null
+        if (isPlaying && animateLyrics && !isAppMinimized) {
+            while (isActive) {
+                androidx.compose.runtime.withFrameMillis {
+                    framePosition = playerConnection.player.currentPosition.coerceAtLeast(0)
+                }
+            }
+        }
+    }
+    val position = framePosition ?: playbackProgress.position
     val duration = playbackProgress.duration
 
     val expressiveAccent = when (playerBackground) {
@@ -304,29 +321,25 @@ fun Lyrics(
     val gradientColorsCache = remember { mutableMapOf<String, List<Color>>() }
     val fallbackColor = MaterialTheme.colorScheme.surface.toArgb()
 
-    LaunchedEffect(currentMetadata?.id, playerBackground) {
-        if ((playerBackground == PlayerBackgroundStyle.GRADIENT || playerBackground == PlayerBackgroundStyle.APPLE_MUSIC) && currentMetadata?.thumbnailUrl != null) {
-            val cachedColors = gradientColorsCache[currentMetadata.id]
-            if (cachedColors != null) {
-                gradientColors = cachedColors
-                return@LaunchedEffect
+    LaunchedEffect(currentMetadata?.thumbnailUrl, playerBackground, fallbackColor) {
+        val artwork = currentMetadata?.thumbnailUrl
+        val fallbackColors = listOf(primaryColor, secondaryColor, tertiaryColor)
+        if (playerBackground == PlayerBackgroundStyle.GRADIENT || playerBackground == PlayerBackgroundStyle.APPLE_MUSIC) {
+            gradientColors = fallbackColors
+            if (artwork != null) {
+                gradientColors = gradientColorsCache[artwork] ?: withContext(Dispatchers.IO) {
+                    val drawable = context.imageLoader.execute(ImageRequest.Builder(context)
+                        .data(artwork).size(128).allowHardware(false).build())
+                        .image?.asDrawable(context.resources) as? BitmapDrawable
+                    drawable?.bitmap?.let { bitmap ->
+                        PlayerColorExtractor.extractGradientColors(
+                            Palette.from(bitmap).maximumColorCount(8).resizeBitmapArea(100 * 100).generate(),
+                            fallbackColor,
+                        )
+                    } ?: fallbackColors
+                }.also { gradientColorsCache[artwork] = it }
             }
-
-            withContext(Dispatchers.IO) {
-                try {
-
-                    val fallbackColors = listOf(primaryColor, secondaryColor, tertiaryColor)
-                    gradientColorsCache[currentMetadata.id] = fallbackColors
-                    withContext(Dispatchers.Main) { gradientColors = fallbackColors }
-                } catch (e: Exception) {
-                    val fallbackColors = listOf(primaryColor, secondaryColor, tertiaryColor)
-                    gradientColorsCache[currentMetadata.id] = fallbackColors
-                    withContext(Dispatchers.Main) { gradientColors = fallbackColors }
-                }
-            }
-        } else {
-            gradientColors = emptyList()
-        }
+        } else gradientColors = emptyList()
     }
 
     LaunchedEffect(currentSongId) {
@@ -343,6 +356,7 @@ fun Lyrics(
                     val existingLyrics = try {
                         database.getLyrics(songId)
                     } catch (e: Throwable) {
+                        if (e is kotlinx.coroutines.CancellationException) throw e
                         null
                     }
 
@@ -359,10 +373,10 @@ fun Lyrics(
                                 com.jay.m3play.di.LyricsHelperEntryPoint::class.java
                             )
                             val lyricsHelper = entryPoint.lyricsHelper()
-                            val fetchedLyrics: String? = currentMetadata.let { lyricsHelper.getLyrics(it) }
+                            val fetchedLyrics = lyricsHelper.getLyricsResult(currentMetadata)
 
-                            val entity = if (!fetchedLyrics.isNullOrBlank()) {
-                                LyricsEntity(songId, fetchedLyrics)
+                            val entity = if (fetchedLyrics.lyrics.isNotBlank()) {
+                                LyricsEntity(songId, fetchedLyrics.lyrics, fetchedLyrics.providerName)
                             } else {
                                 LyricsEntity(songId, LYRICS_NOT_FOUND)
                             }
@@ -371,7 +385,9 @@ fun Lyrics(
                                 database.query {
                                     upsert(entity)
                                 }
-                            } catch (e: Throwable) {}
+                            } catch (e: Throwable) {
+                                if (e is kotlinx.coroutines.CancellationException) throw e
+                            }
 
                             val newCache = lyricsCache.toMutableMap().apply {
                                 put(songId, entity)
@@ -379,6 +395,7 @@ fun Lyrics(
                             lyricsCache = newCache
                             currentLyricsEntity = entity
                         } catch (e: Throwable) {
+                            if (e is kotlinx.coroutines.CancellationException) throw e
                             val errorEntity = LyricsEntity(songId, LYRICS_NOT_FOUND)
                             val newCache = lyricsCache.toMutableMap().apply {
                                 put(songId, errorEntity)
@@ -388,6 +405,7 @@ fun Lyrics(
                         }
                     }
                 } catch (e: Exception) {
+                    if (e is kotlinx.coroutines.CancellationException) throw e
                     val errorEntity = LyricsEntity(songId, LYRICS_NOT_FOUND)
                     val newCache = lyricsCache.toMutableMap().apply {
                         put(songId, errorEntity)
@@ -401,17 +419,19 @@ fun Lyrics(
         }
     }
 
-    val lines = remember(lyrics, scope) {
-        if (lyrics == null || lyrics == LYRICS_NOT_FOUND) {
-            emptyList()
-        } else if (lyrics.startsWith("[")) {
-            val parsedLines = parseLyrics(lyrics)
-            listOf(LyricsEntry.HEAD_LYRICS_ENTRY) + parsedLines
-        } else {
-            lyrics.lines().mapIndexed { index, line ->
-                LyricsEntry(index * 100L, line)
-            }
+    val parsedLines = remember(lyrics) { parseLyrics(lyrics.orEmpty()) }
+    val isSynced = parsedLines.isNotEmpty()
+    val lines = remember(lyrics, parsedLines) {
+        when {
+            lyrics == null || lyrics == LYRICS_NOT_FOUND -> emptyList()
+            parsedLines.isNotEmpty() -> parsedLines
+            else -> lyrics.lines().map { LyricsEntry(0L, it) }
         }
+    }
+    val nextLineTimes = remember(lines, duration) {
+        val times = lines.map { it.time }.distinct()
+        times.mapIndexed { index, time -> time to (times.getOrNull(index + 1)
+            ?: duration.takeIf { it > time } ?: (time + 5000L)) }.toMap()
     }
 
     LaunchedEffect(lines) {
@@ -425,9 +445,6 @@ fun Lyrics(
         isAutoScrollEnabled = true
     }
 
-    val isSynced = remember(lyrics) {
-        !lyrics.isNullOrEmpty() && lyrics.startsWith("[")
-    }
 
     BackHandler(enabled = isSelectionModeActive || isFullscreen) {
         when {
@@ -508,9 +525,9 @@ fun Lyrics(
     }
 
     val sliderPreviewPosition = sliderPositionProvider()
-    LaunchedEffect(lyrics, position, sliderPreviewPosition) {
+    LaunchedEffect(lines, position, sliderPreviewPosition) {
         isSeeking = sliderPreviewPosition != null
-        currentLineIndex = if (lyrics.isNullOrEmpty() || !lyrics.startsWith("[")) {
+        currentLineIndex = if (!isSynced) {
             -1
         } else {
             findCurrentLineIndex(lines, sliderPreviewPosition ?: position)
@@ -635,61 +652,7 @@ fun Lyrics(
                         }
                     }
                     PlayerBackgroundStyle.APPLE_MUSIC -> {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            if (gradientColors.isNotEmpty()) {
-                                // Sophisticated blurred gradient background
-                                val color1 = gradientColors[0]
-                                val color2 = gradientColors.getOrElse(1) { gradientColors[0].copy(alpha = 0.8f) }
-                                val color3 = gradientColors.getOrElse(2) { gradientColors[0].copy(alpha = 0.6f) }
-
-                                androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize().blur(100.dp)) {
-                                    // Main vertical gradient base
-                                    drawRect(
-                                        brush = androidx.compose.ui.graphics.Brush.verticalGradient(
-                                            listOf(color1, color2, color3)
-                                        )
-                                    )
-
-                                    // Multiple circular "color blobs" for a dynamic feel
-                                    drawCircle(
-                                        brush = androidx.compose.ui.graphics.Brush.radialGradient(
-                                            colors = listOf(color1, Color.Transparent),
-                                            center = Offset(size.width * 0.2f, size.height * 0.2f),
-                                            radius = size.width * 0.8f
-                                        ),
-                                        center = Offset(size.width * 0.2f, size.height * 0.2f),
-                                        radius = size.width * 0.8f
-                                    )
-
-                                    drawCircle(
-                                        brush = androidx.compose.ui.graphics.Brush.radialGradient(
-                                            colors = listOf(color2, Color.Transparent),
-                                            center = Offset(size.width * 0.8f, size.height * 0.5f),
-                                            radius = size.width * 0.7f
-                                        ),
-                                        center = Offset(size.width * 0.8f, size.height * 0.5f),
-                                        radius = size.width * 0.7f
-                                    )
-
-                                    drawCircle(
-                                        brush = androidx.compose.ui.graphics.Brush.radialGradient(
-                                            colors = listOf(color3, Color.Transparent),
-                                            center = Offset(size.width * 0.3f, size.height * 0.8f),
-                                            radius = size.width * 0.9f
-                                        ),
-                                        center = Offset(size.width * 0.3f, size.height * 0.8f),
-                                        radius = size.width * 0.9f
-                                    )
-                                }
-
-                                // Dark overlay for text readability
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(Color.Black.copy(alpha = 0.25f))
-                                )
-                            }
-                        }
+                        AnimatedPlayerBackground(currentMetadata?.thumbnailUrl, gradientColors, isPlaying)
                     }
                     PlayerBackgroundStyle.DEFAULT -> {
                         // DEFAULT background
@@ -712,13 +675,39 @@ fun Lyrics(
                 .fillMaxSize()
                 .padding(WindowInsets.systemBars.asPaddingValues())
         ) {
+            if (isFullscreen) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    IconButton(onClick = {
+                        if (isSelectionModeActive) {
+                            isSelectionModeActive = false
+                            selectedIndices.clear()
+                        } else onNavigateBack?.invoke()
+                    }) {
+                        Icon(painterResource(R.drawable.arrow_back), stringResource(R.string.back),
+                            tint = textBackgroundColor)
+                    }
+                    Text(text = stringResource(R.string.lyrics),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = textBackgroundColor,
+                        modifier = Modifier.padding(start = 8.dp))
+                }
+            }
             // Espacio para las letras
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp),
+                    .padding(top = 16.dp)
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(if (frostedGlass)
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.16f)
+                        else Color.Transparent)
+                    .then(if (frostedGlass) Modifier.border(1.dp,
+                        Color.White.copy(alpha = 0.12f), RoundedCornerShape(28.dp)) else Modifier),
                 contentAlignment = Alignment.TopCenter
             ) {
                 BoxWithConstraints(
@@ -726,15 +715,13 @@ fun Lyrics(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    val topPadding = with(LocalDensity.current) {
-                        100.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-                    }
+                    val topPadding = if (isFullscreen) 48.dp else 100.dp
 
                     LazyColumn(
                         state = lazyListState,
                         contentPadding = PaddingValues(
                             top = topPadding,
-                            bottom = if (isFullscreen) 180.dp else 0.dp,
+                            bottom = if (isFullscreen) 80.dp else 0.dp,
                             start = 8.dp,
                             end = 8.dp
                         ),
@@ -780,12 +767,11 @@ fun Lyrics(
                                 key = { index, item -> "$index-${item.time}" }
                             ) { index, item ->
                                 val isSelected = selectedIndices.contains(index)
-                                val nextEntryTime = lines.getOrNull(index + 1)?.time
-                                val currentTime = sliderPosition ?: position
-                                val isSynced = remember(lyrics) {
-                                    !lyrics.isNullOrEmpty() && lyrics.startsWith("[")
-                                }
-                                val isActiveLine = index == displayedCurrentLineIndex && isSynced
+                                val nextEntryTime = item.endTime ?: nextLineTimes[item.time] ?: (item.time + 5000L)
+                                val currentTime = sliderPosition ?: sliderPreviewPosition ?: position
+                                val isActiveLine = isSynced && if (item.endTime != null)
+                                    currentTime >= item.time && currentTime < item.endTime
+                                else item.time == lines.getOrNull(currentLineIndex)?.time
                                 val distance = kotlin.math.abs(index - displayedCurrentLineIndex)
 
                                 LyricsLine(
@@ -794,8 +780,8 @@ fun Lyrics(
                                     isActive = isActiveLine,
                                     distanceFromCurrent = distance,
                                     lyricsTextPosition = lyricsTextPosition,
-                                    textColor = expressiveAccent,
-                                    textSize = 25f,
+                                    textColor = textBackgroundColor,
+                                    textSize = if (isFullscreen) 32f else 25f,
                                     lineSpacing = 4f,
                                     onClick = {
                                         if (isSelectionModeActive) {
@@ -832,6 +818,8 @@ fun Lyrics(
                                     isSelected = isSelected,
                                     isSelectionModeActive = isSelectionModeActive,
                                     isAutoScrollActive = isAutoScrollEnabled,
+                                    position = currentTime,
+                                    endTime = nextEntryTime,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clip(RoundedCornerShape(8.dp))
@@ -840,8 +828,19 @@ fun Lyrics(
                                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
                                             else Color.Transparent
                                         )
-                                        .padding(horizontal = 24.dp, vertical = 4.dp)
+                                        .padding(horizontal = if (isFullscreen) 0.dp else 24.dp, vertical = 4.dp)
                                 )
+                            }
+                            val source = lyricsEntity?.provider
+                            if (!source.isNullOrBlank() && source != "Unknown") {
+                                item {
+                                    Text(
+                                        text = if (source == "Unison") "Lyrics from Unison (https://unison.boidu.dev)" else source,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = textBackgroundColor.copy(alpha = 0.7f),
+                                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+                                    )
+                                }
                             }
                         }
                     }

@@ -105,7 +105,7 @@ fun TimeGreetingCard(
             modifier = modifier.fillMaxWidth(),
             shape = RoundedCornerShape(28.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
         ) {
             Box(

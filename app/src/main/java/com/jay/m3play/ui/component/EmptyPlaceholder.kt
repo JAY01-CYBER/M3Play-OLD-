@@ -8,6 +8,10 @@ package com.jay.m3play.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +35,7 @@ fun EmptyPlaceholder(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier =
             modifier
                 .fillMaxSize()
@@ -39,8 +44,9 @@ fun EmptyPlaceholder(
         Image(
             painter = painterResource(icon),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-            modifier = Modifier.size(64.dp),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer),
+            modifier = Modifier.size(96.dp).clip(RoundedCornerShape(32.dp))
+                .background(MaterialTheme.colorScheme.secondaryContainer).padding(24.dp),
         )
 
         Spacer(Modifier.height(12.dp))

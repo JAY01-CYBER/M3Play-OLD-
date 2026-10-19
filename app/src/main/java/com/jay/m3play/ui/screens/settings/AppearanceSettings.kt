@@ -67,7 +67,7 @@ import com.jay.m3play.constants.PlayerButtonsStyle
 import com.jay.m3play.constants.PlayerButtonsStyleKey
 import com.jay.m3play.constants.PlayerTextAlignmentKey
 import com.jay.m3play.constants.PureBlackKey
-import com.jay.m3play.constants.RotateBackgroundKey
+import com.jay.m3play.constants.AnimatedBackgroundKey
 import com.jay.m3play.constants.SliderStyle
 import com.jay.m3play.constants.SliderStyleKey
 import com.jay.m3play.constants.SlimNavBarKey
@@ -147,9 +147,9 @@ fun AppearanceSettings(
         defaultValue = true
     )
 
-    val (rotateBackground, onRotateBackgroundChange) = rememberPreference(
-        key = RotateBackgroundKey,
-        defaultValue = false
+    val (animatedBackground, onAnimatedBackgroundChange) = rememberPreference(
+        key = AnimatedBackgroundKey,
+        defaultValue = true
     )
 
     // Estados de formas
@@ -463,11 +463,11 @@ fun AppearanceSettings(
                 )},
 
                 {SwitchPreference(
-                    title = { Text(stringResource(R.string.Rotatelyricsbackground)) },
-                    description = null,
+                    title = { Text(stringResource(R.string.animated_player_background)) },
+                    description = stringResource(R.string.animated_player_background_desc),
                     icon = { Icon(painterResource(R.drawable.album), null) },
-                    checked = rotateBackground,
-                    onCheckedChange = onRotateBackgroundChange
+                    checked = animatedBackground,
+                    onCheckedChange = onAnimatedBackgroundChange
                 )},
 
                 {EnumListPreference(

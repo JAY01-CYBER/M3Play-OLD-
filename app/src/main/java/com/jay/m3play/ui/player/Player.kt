@@ -743,64 +743,12 @@ fun BottomSheetPlayer(
                     }
 
                     PlayerBackgroundStyle.APPLE_MUSIC -> {
-                        AnimatedContent(
-                            targetState = mediaMetadata?.thumbnailUrl,
-                            transitionSpec = {
-                                fadeIn(tween(800)).togetherWith(fadeOut(tween(800)))
-                            },
-                            label = "appleMusicBackground",
-                            modifier = Modifier.graphicsLayer { alpha = state.progress.coerceIn(0f, 1f) }
-                        ) { thumbnailUrl ->
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data(thumbnailUrl)
-                                        .precision(Precision.EXACT)
-                                        .crossfade(true)
-                                        .build(),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                                AsyncImage(
-                                    model = thumbnailUrl,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .blur(80.dp)
-                                        .graphicsLayer {
-                                            // Extend blur mask from roughly 40% height to bottom
-                                            alpha = 1f
-                                            clip = true
-                                        }
-                                        .drawWithContent {
-                                            drawContent()
-                                            drawRect(
-                                                brush = Brush.verticalGradient(
-                                                    0.4f to Color.Transparent,
-                                                    0.6f to Color.Black
-                                                ),
-                                                blendMode = BlendMode.DstIn
-                                            )
-                                        }
-                                )
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(
-                                            Brush.verticalGradient(
-                                                listOf(
-                                                    Color.Transparent,
-                                                    Color.Black.copy(alpha = 0.3f),
-                                                    Color.Black.copy(alpha = 0.7f)
-                                                ),
-                                                startY = 0.4f
-                                            )
-                                        )
-                                )
-                            }
-                        }
+                        com.jay.m3play.ui.component.AnimatedPlayerBackground(
+                            artwork = mediaMetadata?.thumbnailUrl,
+                            colors = gradientColors,
+                            isPlaying = isPlaying && state.isExpanded,
+                            modifier = Modifier.graphicsLayer { alpha = state.progress.coerceIn(0f, 1f) },
+                        )
                     }
                     else -> {
                         PlayerBackgroundStyle.DEFAULT
@@ -899,6 +847,11 @@ fun BottomSheetPlayer(
                             }
                         }
                     }
+                }
+
+                androidx.compose.material3.IconButton(onClick = onOpenFullscreenLyrics) {
+                    Icon(painterResource(R.drawable.lyrics),
+                        contentDescription = stringResource(R.string.lyrics), tint = onBackgroundColor)
                 }
 
                 Spacer(modifier = Modifier.width(12.dp))

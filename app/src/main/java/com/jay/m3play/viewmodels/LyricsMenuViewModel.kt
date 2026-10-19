@@ -19,7 +19,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.isActive
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,37 +39,39 @@ constructor(
         title: String,
         artist: String,
         duration: Int,
+        album: String? = null,
     ) {
         isLoading.value = true
         results.value = emptyList()
         job?.cancel()
         job =
             viewModelScope.launch(Dispatchers.IO) {
-                lyricsHelper.getAllLyrics(mediaId, title, artist, duration) { result ->
-                    results.update {
-                        it + result
+                try {
+                    lyricsHelper.getAllLyrics(mediaId, title, artist, duration, album) { result ->
+                        results.update { it + result }
                     }
+                } finally {
+                    if (currentCoroutineContext().isActive) isLoading.value = false
                 }
-                isLoading.value = false
             }
     }
 
     fun cancelSearch() {
         job?.cancel()
         job = null
+        isLoading.value = false
     }
 
     fun refetchLyrics(
         mediaMetadata: MediaMetadata,
         lyricsEntity: LyricsEntity?,
     ) {
-        database.query {
-            lyricsEntity?.let(::delete)
-            val lyrics =
-                runBlocking {
-                    lyricsHelper.getLyrics(mediaMetadata)
-                }
-            upsert(LyricsEntity(mediaMetadata.id, lyrics))
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = lyricsHelper.getLyricsResult(mediaMetadata)
+            database.query {
+                lyricsEntity?.let(::delete)
+                upsert(LyricsEntity(mediaMetadata.id, result.lyrics, result.providerName))
+            }
         }
     }
 }

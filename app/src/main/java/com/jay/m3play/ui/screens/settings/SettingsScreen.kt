@@ -827,6 +827,11 @@ fun SettingsScreen(
                     onClick = { navController.navigate("settings/player") }
                 ),
                 SettingsCategoryItem(
+                    icon = painterResource(R.drawable.lyrics),
+                    title = { Text(stringResource(R.string.lyrics)) },
+                    onClick = { navController.navigate("settings/lyrics") }
+                ),
+                SettingsCategoryItem(
                     icon = painterResource(R.drawable.storage),
                     title = { Text(stringResource(R.string.storage)) },
                     onClick = { navController.navigate("settings/storage") }

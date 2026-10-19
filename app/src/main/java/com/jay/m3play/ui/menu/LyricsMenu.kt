@@ -183,7 +183,8 @@ fun LyricsMenu(
                             searchMediaMetadata.id,
                             titleField.text,
                             artistField.text,
-                            searchMediaMetadata.duration
+                            searchMediaMetadata.duration,
+                            searchMediaMetadata.album?.title,
                         )
                         showSearchResultDialog = true
                     },
@@ -219,9 +220,13 @@ fun LyricsMenu(
         }
 
         ListDialog(
-            onDismiss = { showSearchResultDialog = false },
+            onDismiss = { viewModel.cancelSearch(); showSearchResultDialog = false },
         ) {
             itemsIndexed(results) { index, result ->
+                val parsed = remember(result.lyrics) { com.jay.m3play.lyrics.LyricsUtils.parseLyrics(result.lyrics) }
+                val preview = remember(result.lyrics, parsed) {
+                    if (parsed.isEmpty()) result.lyrics else parsed.joinToString("\n") { it.text }
+                }
                 Row(
                     modifier =
                         Modifier
@@ -233,6 +238,7 @@ fun LyricsMenu(
                                         LyricsEntity(
                                             id = searchMediaMetadata.id,
                                             lyrics = result.lyrics,
+                                            provider = result.providerName,
                                         ),
                                     )
                                 }
@@ -247,7 +253,7 @@ fun LyricsMenu(
                         modifier = Modifier.weight(1f),
                     ) {
                         Text(
-                            text = result.lyrics,
+                            text = preview,
                             style = MaterialTheme.typography.bodyMedium,
                             maxLines = if (index == expandedItemIndex) Int.MAX_VALUE else 2,
                             overflow = TextOverflow.Ellipsis,
@@ -258,12 +264,12 @@ fun LyricsMenu(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = result.providerName,
+                                text = result.attribution,
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.secondary,
                                 maxLines = 1,
                             )
-                            if (result.lyrics.startsWith("[")) {
+                            if (parsed.isNotEmpty()) {
                                 Icon(
                                     painter = painterResource(R.drawable.sync),
                                     contentDescription = null,

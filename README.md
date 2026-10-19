@@ -4,6 +4,23 @@ Android music player with Jetpack Compose screens and Material 3 Expressive UI.
 Login screens embed Android WebViews in Compose; the home-screen widget uses
 Android RemoteViews.
 
+## Lyrics and player effects
+
+Open **Settings → Lyrics** to choose a separate lyrics screen or lyrics inside
+the player, word highlighting, inactive line blur, auto scrolling, background
+motion, and frosted glass. Tap the player artwork to open lyrics; use Back to
+return. These switches are saved across app restarts.
+
+Choose **Apple Music** under **Settings → Appearance → Player background style**
+for animated artwork colors. Background motion stops when playback pauses or
+the app leaves the foreground. Frosted glass adds blurred artwork on Android 12+
+and translucent lyric panels; earlier Android versions retain the tinted panels.
+
+Enhanced LRC `<mm:ss.xxx>` markers provide word timing. For ordinary synced LRC,
+word timing is estimated between lines. Plain lyrics remain readable without
+artificial timing. Lines sharing a timestamp highlight together for unison vocals
+or translations. Precise word timing depends on the lyric source.
+
 ## Build
 
 Install JDK 21 and Android SDK platform 37.2 (Build Tools 37.0.0). Set
@@ -77,3 +94,9 @@ See [architecture and device validation](docs/ARCHITECTURE.md) and
 [icon provenance](third-party/material-symbols/manifest.json).
 
 Battery, CPU and GPU savings require device measurements; no percentage is claimed.
+
+### Lyrics sources
+
+Unison and Better Lyrics are available in Settings → Lyrics, with individual switches and a preferred provider. Existing LRCLIB and KuGou preferences remain supported. Automatic lookup prefers synced lyrics and falls back to other enabled sources when a provider fails or has no match. Refetch existing saved lyrics to change their source.
+
+Lyrics from Unison (https://unison.boidu.dev). Better Lyrics uses its public cached API; uncached songs may require authorization unavailable to third-party apps and will fall back automatically. TTML timing is preserved for word animation and overlapping vocals.

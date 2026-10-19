@@ -6,6 +6,8 @@
 
 package com.jay.m3play.ui.component
 
+import androidx.compose.foundation.background
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
@@ -47,7 +49,10 @@ inline fun <reified T : Enum<T>> SortHeader(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.padding(vertical = 8.dp),
+        modifier = modifier.padding(vertical = 8.dp)
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .padding(horizontal = 12.dp, vertical = 2.dp),
     ) {
         Text(
             text = stringResource(sortTypeText(sortType)),

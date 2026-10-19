@@ -496,4 +496,19 @@
     <string name="hours">hours</string>
     <string name="minute">minute</string>
     <string name="minutes">minutes</string>
+    <string name="separate_lyrics_screen">Separate lyrics screen</string>
+    <string name="separate_lyrics_screen_desc">Open lyrics in a dedicated screen when tapping the artwork. Turn off to show lyrics inside the player.</string>
+    <string name="word_by_word_lyrics">Word by word lyrics</string>
+    <string name="word_by_word_lyrics_desc">Highlight words with playback. Uses word timestamps when available and estimated timing for line-synced lyrics. Requires lyric animations.</string>
+    <string name="lyrics_inactive_blur">Blur inactive lyric lines</string>
+    <string name="animated_player_background">Animated background</string>
+    <string name="animated_player_background_desc">Move soft color gradients in the Apple Music background style while playing.</string>
+    <string name="frosted_glass">Frosted glass</string>
+    <string name="frosted_glass_desc">Add translucent lyric panels and softly blurred artwork to the Apple Music background.</string>
+    <string name="lyrics_providers">Lyrics providers</string>
+    <string name="preferred_lyrics_provider">Preferred lyrics provider</string>
+    <string name="unison_lyrics_desc">Community lyrics with word timing. Lyrics from Unison (https://unison.boidu.dev)</string>
+    <string name="better_lyrics_desc">Word synced lyrics from Better Lyrics. Public cached tracks are available; unavailable tracks use other enabled providers.</string>
+    <string name="home_feed_error">Could not load more recommendations.</string>
+    <string name="retry_loading">Try again</string>
 </resources>
