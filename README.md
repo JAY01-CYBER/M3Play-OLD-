@@ -100,3 +100,17 @@ Battery, CPU and GPU savings require device measurements; no percentage is claim
 Unison and Better Lyrics are available in Settings → Lyrics, with individual switches and a preferred provider. Existing LRCLIB and KuGou preferences remain supported. Automatic lookup prefers synced lyrics and falls back to other enabled sources when a provider fails or has no match. Refetch existing saved lyrics to change their source.
 
 Lyrics from Unison (https://unison.boidu.dev). Better Lyrics uses its public cached API; uncached songs may require authorization unavailable to third-party apps and will fall back automatically. TTML timing is preserved for word animation and overlapping vocals.
+
+### Accompanist lyrics engine
+
+The lyrics screen uses [Accompanist Lyrics Core](https://github.com/6xingyv/accompanist-lyrics-core)
+0.5.0 and [Accompanist Lyrics UI](https://github.com/6xingyv/accompanist-lyrics-ui)
+2.0.0-rc.2 (the published UI release candidate). Core parses the rich vocal model;
+UI renders syllable highlighting, duet alignment, accompaniment, captions, breathing dots
+and chained scrolling. Provider time formats are normalized before parsing, with the
+existing LRC/TTML reader retained for provider variants. No provider credentials are required
+by these libraries. See [third-party notices](third-party/accompanist/NOTICE.md).
+
+Word animation, inactive blur, automatic follow and the separate screen remain configurable.
+Turning off lyrics motion uses a still, accessible list. Apple Music backgrounds retain
+visible artwork with background motion both enabled and disabled.

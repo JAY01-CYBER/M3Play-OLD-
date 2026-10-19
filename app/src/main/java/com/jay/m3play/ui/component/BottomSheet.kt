@@ -10,8 +10,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.SpringSpec
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.DraggableState
@@ -48,7 +47,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import com.jay.m3play.ui.utils.AppMotion
 import com.jay.m3play.constants.NavigationBarAnimationSpec
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -192,19 +190,19 @@ class BottomSheetState(
     }
 
     private fun collapse() {
-        collapse(SpringSpec())
+        collapse(spring(dampingRatio = 0.95f, stiffness = 320f))
     }
 
     private fun expand() {
-        expand(SpringSpec())
+        expand(spring(dampingRatio = 0.95f, stiffness = 320f))
     }
 
     fun collapseSoft() {
-        collapse(tween(durationMillis = AppMotion.CloseDuration, easing = AppMotion.Easing))
+        collapse(spring(dampingRatio = 1f, stiffness = 380f))
     }
 
     fun expandSoft() {
-        expand(tween(durationMillis = AppMotion.OpenDuration, easing = AppMotion.Easing))
+        expand(spring(dampingRatio = 0.95f, stiffness = 320f))
     }
 
     fun dismiss() {

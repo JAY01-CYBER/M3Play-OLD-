@@ -498,6 +498,7 @@ fun AppearanceSettings(
                     title = { Text(stringResource(R.string.lyrics_text_position)) },
                     icon = { Icon(painterResource(R.drawable.lyrics), null) },
                     selectedValue = lyricsPosition,
+                    isEnabled = !animateLyrics,
                     onValueSelected = onLyricsPositionChange,
                     valueText = {
                         when (it) {

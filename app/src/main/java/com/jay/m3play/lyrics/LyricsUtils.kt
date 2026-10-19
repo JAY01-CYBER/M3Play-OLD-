@@ -20,6 +20,7 @@ object LyricsUtils {
 
     fun parseLyrics(lyrics: String): List<LyricsEntry> {
         if (lyrics.trimStart().startsWith("<")) return TtmlLyricsParser.parse(lyrics)
+            .ifEmpty { AccompanistLyrics.parseAdditionalFormat(lyrics) }
         val offset = offsetRegex.find(lyrics)?.groupValues?.get(1)?.toLongOrNull() ?: 0L
         return lyrics.lineSequence().flatMap { line ->
             val trimmed = line.trim()
@@ -53,7 +54,7 @@ object LyricsUtils {
                     words.map { it.copy(time = (it.time + shift).coerceAtLeast(0),
                         endTime = it.endTime?.let { end -> (end + shift).coerceAtLeast(0) }) })
             }
-        }.sorted().toList()
+        }.sorted().toList().ifEmpty { AccompanistLyrics.parseAdditionalFormat(lyrics) }
     }
 
     /** Lines with the same timestamp (unison/translation) stay active together. */

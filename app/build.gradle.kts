@@ -153,6 +153,8 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.network)
     implementation(libs.shimmer)
+    implementation(libs.accompanist.lyrics.core)
+    implementation(libs.accompanist.lyrics.ui)
 
     implementation(libs.media3)
     implementation(libs.media3.session)

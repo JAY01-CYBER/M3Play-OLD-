@@ -1147,7 +1147,7 @@ fun BottomSheetPlayer(
                         isBackPressed || isNextPressed -> 1.1f
                         else -> 1.3f
                     },
-                    animationSpec = spring(dampingRatio = 0.5f, stiffness = 400f),
+                    animationSpec = spring(dampingRatio = 0.9f, stiffness = 380f),
                     label = "playPauseWeight"
                 )
                 val backButtonWeight by animateFloatAsState(
@@ -1156,7 +1156,7 @@ fun BottomSheetPlayer(
                         isPlayPausePressed -> 0.35f
                         else -> 0.45f
                     },
-                    animationSpec = spring(dampingRatio = 0.5f, stiffness = 400f),
+                    animationSpec = spring(dampingRatio = 0.9f, stiffness = 380f),
                     label = "backButtonWeight"
                 )
                 val nextButtonWeight by animateFloatAsState(
@@ -1165,7 +1165,7 @@ fun BottomSheetPlayer(
                         isPlayPausePressed -> 0.35f
                         else -> 0.45f
                     },
-                    animationSpec = spring(dampingRatio = 0.5f, stiffness = 400f),
+                    animationSpec = spring(dampingRatio = 0.9f, stiffness = 380f),
                     label = "nextButtonWeight"
                 )
 
