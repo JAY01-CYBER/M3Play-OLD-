@@ -172,6 +172,7 @@ fun Thumbnail(
                     contentAlignment = Alignment.Center
                 ) {
                     val size = maxWidth - PlayerHorizontalPadding * 2
+                    val artworkSize = size.coerceAtMost(maxHeight)
 
                     LazyHorizontalGrid(
                         rows = GridCells.Fixed(1),
@@ -200,28 +201,22 @@ fun Thumbnail(
                                 contentAlignment = Alignment.Center
                             ) {
 
-                                if (isAppleMusicStyle) {
-                                    // CARÁTULA OCULTA
-                                    Box(modifier = Modifier.size(size))
-                                } else {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(size)
-                                            .clip(RoundedCornerShape(thumbnailCornerRadius.dp * 2))
-                                            .background(MaterialTheme.colorScheme.surfaceVariant)
-                                    ) {
-                                        AsyncImage(
-                                            model = ImageRequest.Builder(LocalContext.current)
-                                                .data(item.mediaMetadata.artworkUri?.toString())
-                                                .memoryCachePolicy(CachePolicy.ENABLED)
-                                                .diskCachePolicy(CachePolicy.ENABLED)
-                                                .networkCachePolicy(CachePolicy.ENABLED)
-                                                .build(),
-                                            contentDescription = null,
-                                            contentScale = ContentScale.Fit,
-                                            modifier = Modifier.fillMaxSize()
-                                        )
-                                    }
+                                Box(
+                                    modifier = Modifier
+                                        .size(artworkSize)
+                                        .clip(RoundedCornerShape(thumbnailCornerRadius.dp * 2))
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                ) {
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(context)
+                                            .data(item.mediaMetadata.artworkUri)
+                                            .memoryCachePolicy(CachePolicy.ENABLED)
+                                            .diskCachePolicy(CachePolicy.ENABLED)
+                                            .build(),
+                                        contentDescription = mediaMetadata?.title,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
                                 }
                             }
                         }
@@ -232,15 +227,10 @@ fun Thumbnail(
 
         if (inlineLyrics) {
             Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-                com.jay.m3play.ui.component.Lyrics(sliderPositionProvider = sliderPositionProvider)
-                androidx.compose.material3.IconButton(
-                    onClick = { inlineLyrics = false }, modifier = Modifier.align(Alignment.TopStart)
-                ) {
-                    androidx.compose.material3.Icon(
-                        painterResource(com.jay.m3play.R.drawable.arrow_back),
-                        stringResource(com.jay.m3play.R.string.back)
-                    )
-                }
+                com.jay.m3play.ui.component.Lyrics(
+                    sliderPositionProvider = sliderPositionProvider,
+                    onBackClick = { inlineLyrics = false },
+                )
             }
         }
 
