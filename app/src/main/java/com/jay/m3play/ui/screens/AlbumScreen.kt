@@ -106,6 +106,7 @@ import com.jay.m3play.LocalDatabase
 import com.jay.m3play.LocalDownloadUtil
 import com.jay.m3play.LocalPlayerAwareWindowInsets
 import com.jay.m3play.LocalPlayerConnection
+import com.jay.m3play.ui.component.expressiveCollectionHeader
 import com.jay.m3play.R
 import com.jay.m3play.db.entities.Album
 import com.jay.m3play.extensions.togglePlayPause
@@ -213,7 +214,7 @@ fun AlbumScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surface),
+                            .expressiveCollectionHeader(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(Modifier.height(50.dp)) // Space for top app bar
@@ -222,7 +223,7 @@ fun AlbumScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 48.dp)
+                                .padding(horizontal = 24.dp)
                         ) {
                             AsyncImage(
                                 model = albumWithSongs.album.thumbnailUrl,
@@ -230,7 +231,7 @@ fun AlbumScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .aspectRatio(1f)
-                                    .clip(RoundedCornerShape(8.dp)),
+                                    .clip(MaterialTheme.shapes.large),
                                 contentScale = ContentScale.Crop
                             )
 
@@ -270,7 +271,7 @@ fun AlbumScreen(
                         // Album Title
                         Text(
                             text = albumWithSongs.album.title,
-                            style = MaterialTheme.typography.headlineMedium,
+                            style = MaterialTheme.typography.headlineLarge,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.onSurface,

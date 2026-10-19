@@ -119,6 +119,7 @@ import com.jay.m3play.LocalDatabase
 import com.jay.m3play.LocalDownloadUtil
 import com.jay.m3play.LocalPlayerAwareWindowInsets
 import com.jay.m3play.LocalPlayerConnection
+import com.jay.m3play.ui.component.expressiveCollectionHeader
 import com.jay.m3play.R
 import com.jay.m3play.constants.ListItemHeight
 import com.jay.m3play.constants.PlaylistEditLockKey
@@ -487,7 +488,7 @@ fun LocalPlaylistScreen(
                                     showDeletePlaylistDialog = true
                                 },
                                 snackbarHostState = snackbarHostState,
-                                modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                                modifier = Modifier.expressiveCollectionHeader()
                             )
                         }
                     }

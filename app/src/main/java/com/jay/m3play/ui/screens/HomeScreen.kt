@@ -11,6 +11,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -38,11 +39,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -129,7 +133,7 @@ import kotlin.random.Random
 import com.jay.m3play.ui.component.TimeGreetingCard
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class, androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -150,7 +154,8 @@ fun HomeScreen(
     val keepListening by viewModel.keepListening.collectAsStateWithLifecycle()
     val similarRecommendations by viewModel.similarRecommendations.collectAsStateWithLifecycle()
     val accountPlaylists by viewModel.accountPlaylists.collectAsStateWithLifecycle()
-    val homePage by viewModel.homePage.collectAsStateWithLifecycle()
+    val homeFeed by viewModel.homeFeed.collectAsStateWithLifecycle()
+    val homePage = homeFeed.page
     val explorePage by viewModel.explorePage.collectAsStateWithLifecycle()
 
     val allLocalItems by viewModel.allLocalItems.collectAsStateWithLifecycle()
@@ -333,6 +338,17 @@ fun HomeScreen(
 
     LaunchedEffect(forgottenFavorites) {
         forgottenFavoritesLazyGridState.scrollToItem(0)
+    }
+
+    LaunchedEffect(lazylistState, homePage?.continuation, homeFeed.loadingMore, homeFeed.failed) {
+        if (homeFeed.failed || homeFeed.refreshing || homeFeed.loadingMore || homePage?.continuation == null) return@LaunchedEffect
+        snapshotFlow {
+            val layout = lazylistState.layoutInfo
+            layout.totalItemsCount > 0 &&
+                (layout.visibleItemsInfo.lastOrNull()?.index ?: -1) >= layout.totalItemsCount - 5
+        }.distinctUntilChanged().collect { nearEnd ->
+            if (nearEnd) viewModel.loadMore()
+        }
     }
 
     // MEJORA 1: Usar PullToRefreshBox en lugar de modifier
@@ -646,6 +662,9 @@ fun HomeScreen(
                     item {
                         NavigationTitle(
                             title = it.title,
+                            onClick = it.endpoint?.let { endpoint ->
+                                { navController.navigate("youtube_browse/${endpoint.browseId}?params=${java.net.URLEncoder.encode(endpoint.params.orEmpty(), "UTF-8")}") }
+                            },
                             label = it.label,
                             thumbnail = it.thumbnail?.let { thumbnailUrl ->
                                 {
@@ -841,6 +860,22 @@ fun HomeScreen(
                                             }
                                         )
                                 )
+                            }
+                        }
+                    }
+                }
+                if (homeFeed.loadingMore || homeFeed.refreshing || homeFeed.failed) {
+                    item(key = "home_feed_status") {
+                        Column(Modifier.fillMaxWidth().padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally) {
+                            if (homeFeed.failed) {
+                                Text(stringResource(R.string.home_feed_error),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                androidx.compose.material3.FilledTonalButton(onClick = viewModel::retryHome) {
+                                    Text(stringResource(R.string.retry_loading))
+                                }
+                            } else {
+                                androidx.compose.material3.ContainedLoadingIndicator()
                             }
                         }
                     }

@@ -33,6 +33,8 @@ const val SYSTEM_DEFAULT = "SYSTEM_DEFAULT"
 val ContentLanguageKey = stringPreferencesKey("contentLanguage")
 val ContentCountryKey = stringPreferencesKey("contentCountry")
 val EnableKugouKey = booleanPreferencesKey("enableKugou")
+val EnableBetterLyricsKey = booleanPreferencesKey("enableBetterLyrics")
+val EnableUnisonLyricsKey = booleanPreferencesKey("enableUnisonLyrics")
 val EnableLrcLibKey = booleanPreferencesKey("enableLrclib")
 val HideExplicitKey = booleanPreferencesKey("hideExplicit")
 val LastNewReleaseCheckKey = longPreferencesKey("last_new_release_check")
@@ -132,6 +134,9 @@ val QueueEditLockKey = booleanPreferencesKey("queueEditLock")
 
 val LyricFontSizeKey = intPreferencesKey("lyricFontSize")
 val fullScreenLyricsKey = booleanPreferencesKey("fullScreenLyrics")
+val WordByWordLyricsKey = booleanPreferencesKey("wordByWordLyrics")
+val FrostedGlassKey = booleanPreferencesKey("frostedGlass")
+val AnimatedBackgroundKey = booleanPreferencesKey("animatedPlayerBackground")
 val AnimateLyricsKey = booleanPreferencesKey("animate_lyrics")
 
 
@@ -279,6 +284,8 @@ enum class QuickPicks {
 }
 
 enum class PreferredLyricsProvider {
+    UNISON,
+    BETTER_LYRICS,
     LRCLIB,
     KUGOU,
 }

@@ -90,6 +90,7 @@ import com.jay.innertube.models.WatchEndpoint
 import com.jay.m3play.LocalDatabase
 import com.jay.m3play.LocalPlayerAwareWindowInsets
 import com.jay.m3play.LocalPlayerConnection
+import com.jay.m3play.ui.component.expressiveCollectionHeader
 import com.jay.m3play.R
 import com.jay.m3play.constants.AppBarHeight
 import com.jay.m3play.db.entities.ArtistEntity
@@ -219,13 +220,14 @@ fun ArtistScreen(
                 val artistName = artistPage.artist.title
 
                 Column(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().expressiveCollectionHeader()
                 ) {
                     if (true) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(1f)
+                                .aspectRatio(1.15f)
+                                .clip(RoundedCornerShape(28.dp))
                         ) {
                             AsyncImage(
                                 model = thumbnail?.resize(1200, 1200),

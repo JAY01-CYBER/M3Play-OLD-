@@ -32,6 +32,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -63,6 +64,10 @@ fun Thumbnail(
 ) {
     val playerConnection = LocalPlayerConnection.current ?: return
     val context = LocalContext.current
+    val fullscreenLyrics by rememberPreference(com.jay.m3play.constants.fullScreenLyricsKey, true)
+    var inlineLyrics by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+    androidx.activity.compose.BackHandler(enabled = inlineLyrics) { inlineLyrics = false }
+
 
     val mediaMetadata by playerConnection.mediaMetadata.collectAsStateWithLifecycle()
     val error by playerConnection.error.collectAsStateWithLifecycle()
@@ -180,9 +185,9 @@ fun Thumbnail(
                                 modifier = Modifier
                                     .width(maxWidth)
                                     .fillMaxSize()
-                                    .pointerInput(Unit) {
+                                    .pointerInput(fullscreenLyrics) {
                                         detectTapGestures(
-                                            onTap = { onOpenFullscreenLyrics() },
+                                            onTap = { if (fullscreenLyrics) onOpenFullscreenLyrics() else inlineLyrics = true },
                                             onDoubleTap = { offset ->
                                                 if (offset.x < size.toPx() / 2) {
                                                     playerConnection.player.seekBack()
@@ -221,6 +226,20 @@ fun Thumbnail(
                             }
                         }
                     }
+                }
+            }
+        }
+
+        if (inlineLyrics) {
+            Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+                com.jay.m3play.ui.component.Lyrics(sliderPositionProvider = sliderPositionProvider)
+                androidx.compose.material3.IconButton(
+                    onClick = { inlineLyrics = false }, modifier = Modifier.align(Alignment.TopStart)
+                ) {
+                    androidx.compose.material3.Icon(
+                        painterResource(com.jay.m3play.R.drawable.arrow_back),
+                        stringResource(com.jay.m3play.R.string.back)
+                    )
                 }
             }
         }

@@ -40,12 +40,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -193,7 +187,9 @@ import com.jay.m3play.ui.component.BottomSheetMenu
 import com.jay.m3play.ui.component.IconButton
 import com.jay.m3play.ui.component.LocalMenuState
 import com.jay.m3play.ui.component.LocaleManager
-import com.jay.m3play.ui.component.Lyrics
+import com.jay.m3play.ui.utils.AppMotion
+import com.jay.m3play.ui.utils.screenEnterTransition
+import com.jay.m3play.ui.utils.screenExitTransition
 import com.jay.m3play.ui.component.SwitchPreference
 import com.jay.m3play.ui.component.TopSearch
 import com.jay.m3play.ui.component.rememberBottomSheetState
@@ -354,7 +350,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            var showFullscreenLyrics by remember { mutableStateOf(false) }
+            var showFullscreenLyrics by rememberSaveable { mutableStateOf(false) }
 
             val enableDynamicTheme by rememberPreference(DynamicThemeKey, defaultValue = true)
             val darkTheme by rememberEnumPreference(DarkModeKey, defaultValue = DarkMode.AUTO)
@@ -751,23 +747,6 @@ class MainActivity : ComponentActivity() {
                                 Box {
                                     BottomSheetPlayer(state = playerBottomSheetState, navController = navController, onOpenFullscreenLyrics = { showFullscreenLyrics = true }, modifier = Modifier.fillMaxSize())
 
-                                    AnimatedVisibility(
-                                        visible = showFullscreenLyrics,
-                                        enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(300)) + fadeIn(animationSpec = tween(300)),
-                                        exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
-                                    ) {
-                                        val playerConnection = LocalPlayerConnection.current
-                                        val mediaMetadata by playerConnection?.mediaMetadata?.collectAsStateWithLifecycle() ?: return@AnimatedVisibility
-
-                                        if (mediaMetadata != null) {
-                                            Lyrics(sliderPositionProvider = { null }, onNavigateBack = { showFullscreenLyrics = false }, modifier = Modifier.fillMaxSize())
-                                        } else {
-                                            Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
-                                                Text("No hay canción reproduciéndose")
-                                            }
-                                        }
-                                    }
-
                                     val configuration = LocalConfiguration.current
                                     val isTabletLandscape = with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp().value } >= 600 && configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
                                     val shouldShowBottomNav = true
@@ -839,38 +818,25 @@ class MainActivity : ComponentActivity() {
                             NavHost(
                                 navController = navController,
                                 startDestination = when (tabOpenedFromShortcut ?: defaultOpenTab) { NavigationTab.HOME -> Screens.Home; NavigationTab.EXPLORE -> Screens.Explore; NavigationTab.LIBRARY -> Screens.Library }.route,
-                                enterTransition = {
-                                    if (initialState.destination.route in topLevelScreens && targetState.destination.route in topLevelScreens) {
-                                        fadeIn(tween(180))
-                                    } else {
-                                        fadeIn(tween(180)) + slideInHorizontally(initialOffsetX = { it / 12 }, animationSpec = tween(220, easing = FastOutSlowInEasing))
-                                    }
-                                },
-                                exitTransition = {
-                                    if (initialState.destination.route in topLevelScreens && targetState.destination.route in topLevelScreens) {
-                                        fadeOut(tween(140))
-                                    } else {
-                                        fadeOut(tween(140)) + slideOutHorizontally(targetOffsetX = { -it / 12 }, animationSpec = tween(220, easing = FastOutSlowInEasing))
-                                    }
-                                },
-                                popEnterTransition = {
-                                    if ((initialState.destination.route in topLevelScreens || initialState.destination.route?.startsWith("search/") == true) && targetState.destination.route in topLevelScreens) {
-                                        fadeIn(tween(180))
-                                    } else {
-                                        fadeIn(tween(180)) + slideInHorizontally(initialOffsetX = { -it / 12 }, animationSpec = tween(200, easing = FastOutSlowInEasing))
-                                    }
-                                },
-                                popExitTransition = {
-                                    if ((initialState.destination.route in topLevelScreens || initialState.destination.route?.startsWith("search/") == true) && targetState.destination.route in topLevelScreens) {
-                                        fadeOut(tween(140))
-                                    } else {
-                                        fadeOut(tween(140)) + slideOutHorizontally(targetOffsetX = { it / 12 }, animationSpec = tween(200, easing = FastOutSlowInEasing))
-                                    }
-                                },
+                                enterTransition = { screenEnterTransition() },
+                                exitTransition = { screenExitTransition() },
+                                popEnterTransition = { screenEnterTransition(isBack = true) },
+                                popExitTransition = { screenExitTransition(isBack = true) },
                                 modifier = Modifier.nestedScroll(if (navigationItems.fastAny { it.route == navBackStackEntry?.destination?.route } || navBackStackEntry?.destination?.route?.startsWith("search/") == true) searchBarScrollBehavior.nestedScrollConnection else topAppBarScrollBehavior.nestedScrollConnection)
                             ) {
                                 navigationBuilder(navController, topAppBarScrollBehavior, latestVersionName)
                             }
+                        }
+
+                        AnimatedVisibility(
+                            visible = showFullscreenLyrics,
+                            modifier = Modifier.fillMaxSize(),
+                            enter = AppMotion.sheetEnter(),
+                            exit = AppMotion.sheetExit()
+                        ) {
+                            com.jay.m3play.ui.screens.LyricsScreen(
+                                onDismiss = { showFullscreenLyrics = false }
+                            )
                         }
 
                         BottomSheetMenu(state = LocalMenuState.current, modifier = Modifier.align(Alignment.BottomCenter))

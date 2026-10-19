@@ -18,45 +18,25 @@ val GeomFont = FontFamily(
     Font(R.font.geom, FontWeight.Normal)
 )
 
+private fun expressiveType(size: Int, height: Int, weight: FontWeight = FontWeight.Normal) = TextStyle(
+    fontFamily = GeomFont, fontSize = size.sp, lineHeight = height.sp,
+    fontWeight = weight, letterSpacing = 0.sp,
+)
+
 val Typography = Typography(
-
-    titleLarge = TextStyle(
-        fontFamily = GeomFont,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-
-    titleMedium = TextStyle(
-        fontFamily = GeomFont,
-        fontWeight = FontWeight.Medium,
-        fontSize = 18.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.15.sp
-    ),
-
-    bodyLarge = TextStyle(
-        fontFamily = GeomFont,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    ),
-
-    bodyMedium = TextStyle(
-        fontFamily = GeomFont,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.25.sp
-    ),
-
-    labelLarge = TextStyle(
-        fontFamily = GeomFont,
-        fontWeight = FontWeight.Medium,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.1.sp
-    )
+    displayLarge = expressiveType(57, 64, FontWeight.Bold),
+    displayMedium = expressiveType(45, 52, FontWeight.Bold),
+    displaySmall = expressiveType(36, 44, FontWeight.Bold),
+    headlineLarge = expressiveType(32, 40, FontWeight.Bold),
+    headlineMedium = expressiveType(28, 36, FontWeight.Bold),
+    headlineSmall = expressiveType(24, 32, FontWeight.SemiBold),
+    titleLarge = expressiveType(22, 28, FontWeight.SemiBold),
+    titleMedium = expressiveType(18, 24, FontWeight.Medium),
+    titleSmall = expressiveType(14, 20, FontWeight.Medium),
+    bodyLarge = expressiveType(16, 24),
+    bodyMedium = expressiveType(14, 20),
+    bodySmall = expressiveType(12, 16),
+    labelLarge = expressiveType(14, 20, FontWeight.SemiBold),
+    labelMedium = expressiveType(12, 16, FontWeight.Medium),
+    labelSmall = expressiveType(11, 16, FontWeight.Medium),
 )

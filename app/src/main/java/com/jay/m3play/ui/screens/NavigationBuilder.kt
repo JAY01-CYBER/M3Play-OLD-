@@ -9,9 +9,6 @@ package com.jay.m3play.ui.screens
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.getValue
@@ -93,26 +90,6 @@ fun NavGraphBuilder.navigationBuilder(
                     type = NavType.StringType
                 },
             ),
-        enterTransition = {
-            fadeIn(tween(180))
-        },
-        exitTransition = {
-            if (targetState.destination.route?.startsWith("search/") == true) {
-                fadeOut(tween(140))
-            } else {
-                null // Use the same short transition as other destinations.
-            }
-        },
-        popEnterTransition = {
-            if (initialState.destination.route?.startsWith("search/") == true) {
-                fadeIn(tween(180))
-            } else {
-                null // Inherit the NavHost back transition.
-            }
-        },
-        popExitTransition = {
-            fadeOut(tween(140))
-        },
     ) {
         OnlineSearchResult(navController)
     }
@@ -261,6 +238,9 @@ fun NavGraphBuilder.navigationBuilder(
     }
     composable("settings/content") {
         ContentSettings(navController, scrollBehavior)
+    }
+    composable("settings/lyrics") {
+        com.jay.m3play.ui.screens.settings.LyricsSettings(navController, scrollBehavior)
     }
     composable("settings/player") {
         PlayerSettings(navController, scrollBehavior)

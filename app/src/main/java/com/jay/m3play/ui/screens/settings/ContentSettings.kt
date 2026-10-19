@@ -25,8 +25,6 @@ import com.jay.m3play.constants.EnableLrcLibKey
 import com.jay.m3play.constants.HideExplicitKey
 import com.jay.m3play.constants.HistoryDuration
 import com.jay.m3play.constants.LanguageCodeToName
-import com.jay.m3play.constants.PreferredLyricsProvider
-import com.jay.m3play.constants.PreferredLyricsProviderKey
 import com.jay.m3play.constants.ProxyEnabledKey
 import com.jay.m3play.constants.ProxyTypeKey
 import com.jay.m3play.constants.ProxyUrlKey
@@ -94,10 +92,6 @@ fun ContentSettings(
     val (enableLrclib, onEnableLrclibChange) = rememberPreference(
         key = EnableLrcLibKey,
         defaultValue = true
-    )
-    val (preferredProvider, onPreferredProviderChange) = rememberEnumPreference(
-        key = PreferredLyricsProviderKey,
-        defaultValue = PreferredLyricsProvider.LRCLIB
     )
 
 

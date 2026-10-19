@@ -19,7 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,7 +50,7 @@ fun SettingsPage(title: String, navController: NavController, scrollBehavior: To
         Spacer(
             Modifier.windowInsetsPadding(
                 LocalPlayerAwareWindowInsets.current.only(WindowInsetsSides.Top)
-            )
+            ).height(48.dp)
         )
 
         items()
@@ -69,7 +69,7 @@ fun SettingsPage(title: String, navController: NavController, scrollBehavior: To
 @ExperimentalMaterial3Api
 @Composable
 fun SettingsTopAppBar(title: String, navController: NavController, scrollBehavior: TopAppBarScrollBehavior) {
-    TopAppBar(
+    MediumTopAppBar(
         title = { Text(title) },
         navigationIcon = {
             IconButton(
@@ -83,7 +83,7 @@ fun SettingsTopAppBar(title: String, navController: NavController, scrollBehavio
             }
         },
         modifier = Modifier
-            .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)),
+            .clip(RoundedCornerShape(bottomStart = 28.dp, bottomEnd = 28.dp)),
         scrollBehavior = scrollBehavior
     )
 }

@@ -88,6 +88,7 @@ import com.jay.innertube.models.WatchEndpoint
 import com.jay.m3play.LocalDatabase
 import com.jay.m3play.LocalPlayerAwareWindowInsets
 import com.jay.m3play.LocalPlayerConnection
+import com.jay.m3play.ui.component.expressiveCollectionHeader
 import com.jay.m3play.R
 import com.jay.m3play.constants.AlbumThumbnailSize
 import com.jay.m3play.constants.HideExplicitKey
@@ -223,7 +224,7 @@ fun OnlinePlaylistScreen(
                                 Column(
                                     modifier =
                                         Modifier
-                                            .padding(12.dp)
+                                            .expressiveCollectionHeader()
                                             .animateItem(),
                                 ) {
                                     Row(
@@ -255,7 +256,7 @@ fun OnlinePlaylistScreen(
                                                 fontWeight = FontWeight.Bold,
                                                 maxLines = 2,
                                                 overflow = TextOverflow.Ellipsis,
-                                                fontSizeRange = FontSizeRange(16.sp, 22.sp),
+                                                fontSizeRange = FontSizeRange(18.sp, 28.sp),
                                             )
 
                                             playlist.author?.let { artist ->

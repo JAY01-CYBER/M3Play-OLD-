@@ -49,9 +49,9 @@ fun SettingsCategory(
         title?.let {
             Text(
                 text = it,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(start = 0.dp, bottom = 8.dp, top = 8.dp)
+                modifier = Modifier.padding(start = 0.dp, bottom = 12.dp, top = 20.dp)
             )
         }
 
@@ -60,9 +60,9 @@ fun SettingsCategory(
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize(),
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(28.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -92,9 +92,9 @@ fun SettingsGeneralCategory(
         title?.let {
             Text(
                 text = it,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(start = 0.dp, bottom = 8.dp, top = 8.dp)
+                modifier = Modifier.padding(start = 0.dp, bottom = 12.dp, top = 20.dp)
             )
         }
 
@@ -103,9 +103,9 @@ fun SettingsGeneralCategory(
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize(),
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(28.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {

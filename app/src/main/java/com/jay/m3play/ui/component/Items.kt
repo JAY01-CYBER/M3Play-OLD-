@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -124,18 +125,12 @@ inline fun ListItem(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier =
-            if (isActive) {
-                modifier
-                    .height(ListItemHeight)
-                    .padding(horizontal = 8.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(color = MaterialTheme.colorScheme.secondaryContainer)
-            } else {
-                modifier
-                    .height(ListItemHeight)
-                    .padding(horizontal = 8.dp)
-            },
+        modifier = modifier
+            .padding(horizontal = 12.dp, vertical = 3.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .background(if (isActive) MaterialTheme.colorScheme.secondaryContainer
+                else MaterialTheme.colorScheme.surfaceContainerLow)
+            .heightIn(min = ListItemHeight),
     ) {
         Box(
             modifier = Modifier.padding(6.dp),
@@ -151,8 +146,8 @@ inline fun ListItem(
         ) {
             Text(
                 text = title,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier =
@@ -217,12 +212,18 @@ fun GridItem(
         modifier =
             if (fillMaxWidth) {
                 modifier
+                    .padding(8.dp)
+                    .clip(MaterialTheme.shapes.large)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .padding(12.dp)
                     .fillMaxWidth()
             } else {
                 modifier
+                    .padding(8.dp)
+                    .width(GridThumbnailHeight * thumbnailRatio + 24.dp)
+                    .clip(MaterialTheme.shapes.large)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .padding(12.dp)
-                    .width(GridThumbnailHeight * thumbnailRatio)
 
             },
     ) {
@@ -236,12 +237,12 @@ fun GridItem(
                     Modifier.height(GridThumbnailHeight)
                 }
                     .aspectRatio(thumbnailRatio)
-                    .clip(RoundedCornerShape(27.dp)),
+                    .clip(MaterialTheme.shapes.large),
         ) {
             thumbnailContent()
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         Text(
             text = title,

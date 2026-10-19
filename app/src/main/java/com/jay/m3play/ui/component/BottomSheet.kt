@@ -10,7 +10,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.VectorConverter
@@ -49,6 +48,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import com.jay.m3play.ui.utils.AppMotion
 import com.jay.m3play.constants.NavigationBarAnimationSpec
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -200,11 +200,11 @@ class BottomSheetState(
     }
 
     fun collapseSoft() {
-        collapse(tween(durationMillis = 260, easing = FastOutSlowInEasing))
+        collapse(tween(durationMillis = AppMotion.CloseDuration, easing = AppMotion.Easing))
     }
 
     fun expandSoft() {
-        expand(tween(durationMillis = 280, easing = FastOutSlowInEasing))
+        expand(tween(durationMillis = AppMotion.OpenDuration, easing = AppMotion.Easing))
     }
 
     fun dismiss() {

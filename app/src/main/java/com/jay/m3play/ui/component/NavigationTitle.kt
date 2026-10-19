@@ -7,6 +7,12 @@
 package com.jay.m3play.ui.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,7 +53,7 @@ fun NavigationTitle(
             .clickable(enabled = onClick != null) {
                 onClick?.invoke()
             }
-            .padding(horizontal = 12.dp, vertical = 12.dp)
+            .padding(horizontal = 20.dp, vertical = 18.dp)
     ) {
         thumbnail?.invoke()
 
@@ -67,18 +73,24 @@ fun NavigationTitle(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
+                maxLines = 2,
             )
         }
 
+        if (onPlayAllClick != null) {
+            FilledTonalIconButton(onClick = onPlayAllClick) {
+                Icon(painterResource(R.drawable.play), androidx.compose.ui.res.stringResource(R.string.play))
+            }
+        }
         if (onClick != null) {
-            Icon(
-                painter = painterResource(R.drawable.arrow_forward),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
+            Box(Modifier.size(40.dp).clip(CircleShape)
+                .background(MaterialTheme.colorScheme.secondaryContainer), contentAlignment = Alignment.Center) {
+                Icon(painterResource(R.drawable.arrow_forward), null,
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.size(20.dp))
+            }
         }
     }
 }
