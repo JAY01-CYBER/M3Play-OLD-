@@ -1,0 +1,163 @@
+/*
+ * This file is part of M3 Play.
+ * License information: see LICENSE in the repository root.
+ * Copyright and authorship: see Git history and any notices below.
+ */
+
+package com.jay.m3play.playback
+
+import android.content.Context
+import android.net.ConnectivityManager
+import androidx.core.content.getSystemService
+import androidx.core.net.toUri
+import androidx.media3.database.DatabaseProvider
+import androidx.media3.datasource.ResolvingDataSource
+import androidx.media3.datasource.cache.CacheDataSource
+import androidx.media3.datasource.cache.SimpleCache
+import androidx.media3.datasource.okhttp.OkHttpDataSource
+import androidx.media3.exoplayer.offline.Download
+import androidx.media3.exoplayer.offline.DownloadManager
+import androidx.media3.exoplayer.offline.DownloadNotificationHelper
+import com.jay.innertube.YouTube
+import com.jay.m3play.constants.AudioQuality
+import com.jay.m3play.constants.AudioQualityKey
+import com.jay.m3play.db.MusicDatabase
+import com.jay.m3play.db.entities.FormatEntity
+import com.jay.m3play.di.DownloadCache
+import com.jay.m3play.di.PlayerCache
+import com.jay.m3play.utils.YTPlayerUtils
+import com.jay.m3play.utils.enumPreference
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
+import java.util.concurrent.Executor
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class DownloadUtil
+@Inject
+constructor(
+    @ApplicationContext context: Context,
+    val database: MusicDatabase,
+    val databaseProvider: DatabaseProvider,
+    @DownloadCache val downloadCache: SimpleCache,
+    @PlayerCache val playerCache: SimpleCache,
+) {
+    private val connectivityManager = context.getSystemService<ConnectivityManager>()!!
+    private val audioQuality by enumPreference(context, AudioQualityKey, AudioQuality.AUTO)
+    private val songUrlCache = HashMap<String, Pair<String, Long>>()
+    private val dataSourceFactory =
+        ResolvingDataSource.Factory(
+            CacheDataSource
+                .Factory()
+                .setCache(playerCache)
+                .setUpstreamDataSourceFactory(
+                    OkHttpDataSource.Factory(
+                        OkHttpClient
+                            .Builder()
+                            .proxy(YouTube.proxy)
+                            .addInterceptor(YTPlayerUtils.userAgentInterceptor)
+                            .build(),
+                    ),
+                ),
+        ) { dataSpec ->
+            val mediaId = dataSpec.key ?: error("No media id")
+            val length = if (dataSpec.length >= 0) dataSpec.length else 1
+
+            if (playerCache.isCached(mediaId, dataSpec.position, length)) {
+                return@Factory dataSpec
+            }
+
+            songUrlCache[mediaId]?.takeIf { it.second > System.currentTimeMillis() }?.let {
+                return@Factory dataSpec.withUri(it.first.toUri())
+            }
+
+            val playedFormat = runBlocking(Dispatchers.IO) { database.format(mediaId).first() }
+            val playbackData = runBlocking(Dispatchers.IO) {
+                YTPlayerUtils.playerResponseForPlayback(
+                    mediaId,
+                    audioQuality = audioQuality,
+                    connectivityManager = connectivityManager,
+                )
+            }.getOrThrow()
+            val format = playbackData.format
+
+            database.query {
+                upsert(
+                    FormatEntity(
+                        id = mediaId,
+                        itag = format.itag,
+                        mimeType = format.mimeType.substringBefore(";"),
+                        codecs = playbackData.codecs,
+                        bitrate = format.bitrate,
+                        sampleRate = format.audioSampleRate,
+                        contentLength = playbackData.contentLength,
+                        loudnessDb = playbackData.audioConfig?.loudnessDb,
+                        playbackUrl = playbackData.streamUrl
+                    ),
+                )
+            }
+
+            val streamUrl = playbackData.streamUrl.let {
+                // Specify range to avoid YouTube's throttling
+                "${it}&range=0-${playbackData.contentLength.takeIf { len -> len > 0 } ?: 10000000L}"
+            }
+
+            songUrlCache[mediaId] =
+                streamUrl to System.currentTimeMillis() + (playbackData.streamExpiresInSeconds * 1000L)
+            dataSpec.withUri(streamUrl.toUri())
+        }
+    val downloadNotificationHelper =
+        DownloadNotificationHelper(context, ExoDownloadService.CHANNEL_ID)
+    val downloadManager: DownloadManager =
+        DownloadManager(
+            context,
+            databaseProvider,
+            downloadCache,
+            dataSourceFactory,
+            Executor(Runnable::run)
+        ).apply {
+            maxParallelDownloads = 3
+            addListener(
+                ExoDownloadService.TerminalStateNotificationHelper(
+                    context = context,
+                    notificationHelper = downloadNotificationHelper,
+                    nextNotificationId = ExoDownloadService.NOTIFICATION_ID + 1,
+                ),
+            )
+        }
+    val downloads = MutableStateFlow<Map<String, Download>>(emptyMap())
+
+    fun getDownload(songId: String): Flow<Download?> = downloads.map { it[songId] }
+
+    init {
+        val result = mutableMapOf<String, Download>()
+        val cursor = downloadManager.downloadIndex.getDownloads()
+        while (cursor.moveToNext()) {
+            result[cursor.download.request.id] = cursor.download
+        }
+        downloads.value = result
+        downloadManager.addListener(
+            object : DownloadManager.Listener {
+                override fun onDownloadChanged(
+                    downloadManager: DownloadManager,
+                    download: Download,
+                    finalException: Exception?,
+                ) {
+                    downloads.update { map ->
+                        map.toMutableMap().apply {
+                            set(download.request.id, download)
+                        }
+                    }
+                }
+            },
+        )
+    }
+}

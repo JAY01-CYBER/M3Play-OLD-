@@ -1,0 +1,647 @@
+{
+  "upstream": "https://github.com/google/material-design-icons",
+  "revision": "737e3324305806514d7909874fa1818ae1808232",
+  "style": "Material Symbols Rounded, 24px, weight 400",
+  "brandAssetsPreserved": [
+    "discord",
+    "facebook",
+    "github",
+    "instagram",
+    "opentune",
+    "opentune_monochrome",
+    "paypal",
+    "telegram"
+  ],
+  "icons": {
+    "add": {
+      "symbol": "add",
+      "filled": false,
+      "source": "symbols/android/add/materialsymbolsrounded/add_24px.xml"
+    },
+    "album": {
+      "symbol": "album",
+      "filled": false,
+      "source": "symbols/android/album/materialsymbolsrounded/album_24px.xml"
+    },
+    "arrow_back": {
+      "symbol": "arrow_back",
+      "filled": false,
+      "source": "symbols/android/arrow_back/materialsymbolsrounded/arrow_back_24px.xml"
+    },
+    "arrow_downward": {
+      "symbol": "arrow_downward",
+      "filled": false,
+      "source": "symbols/android/arrow_downward/materialsymbolsrounded/arrow_downward_24px.xml"
+    },
+    "arrow_forward": {
+      "symbol": "arrow_forward",
+      "filled": false,
+      "source": "symbols/android/arrow_forward/materialsymbolsrounded/arrow_forward_24px.xml"
+    },
+    "arrow_top_left": {
+      "symbol": "north_west",
+      "filled": false,
+      "source": "symbols/android/north_west/materialsymbolsrounded/north_west_24px.xml"
+    },
+    "arrow_upward": {
+      "symbol": "arrow_upward",
+      "filled": false,
+      "source": "symbols/android/arrow_upward/materialsymbolsrounded/arrow_upward_24px.xml"
+    },
+    "artist": {
+      "symbol": "artist",
+      "filled": false,
+      "source": "symbols/android/artist/materialsymbolsrounded/artist_24px.xml"
+    },
+    "auto_awesome": {
+      "symbol": "auto_awesome",
+      "filled": false,
+      "source": "symbols/android/auto_awesome/materialsymbolsrounded/auto_awesome_24px.xml"
+    },
+    "backup": {
+      "symbol": "backup",
+      "filled": false,
+      "source": "symbols/android/backup/materialsymbolsrounded/backup_24px.xml"
+    },
+    "bedtime": {
+      "symbol": "bedtime",
+      "filled": false,
+      "source": "symbols/android/bedtime/materialsymbolsrounded/bedtime_24px.xml"
+    },
+    "cached": {
+      "symbol": "cached",
+      "filled": false,
+      "source": "symbols/android/cached/materialsymbolsrounded/cached_24px.xml"
+    },
+    "check": {
+      "symbol": "check",
+      "filled": false,
+      "source": "symbols/android/check/materialsymbolsrounded/check_24px.xml"
+    },
+    "check_circle": {
+      "symbol": "check_circle",
+      "filled": false,
+      "source": "symbols/android/check_circle/materialsymbolsrounded/check_circle_24px.xml"
+    },
+    "chevron_right": {
+      "symbol": "chevron_right",
+      "filled": false,
+      "source": "symbols/android/chevron_right/materialsymbolsrounded/chevron_right_24px.xml"
+    },
+    "clear_all": {
+      "symbol": "clear_all",
+      "filled": false,
+      "source": "symbols/android/clear_all/materialsymbolsrounded/clear_all_24px.xml"
+    },
+    "close": {
+      "symbol": "close",
+      "filled": false,
+      "source": "symbols/android/close/materialsymbolsrounded/close_24px.xml"
+    },
+    "cloud_lock": {
+      "symbol": "cloud_lock",
+      "filled": false,
+      "source": "symbols/android/cloud_lock/materialsymbolsrounded/cloud_lock_24px.xml"
+    },
+    "content_copy": {
+      "symbol": "content_copy",
+      "filled": false,
+      "source": "symbols/android/content_copy/materialsymbolsrounded/content_copy_24px.xml"
+    },
+    "contrast": {
+      "symbol": "contrast",
+      "filled": false,
+      "source": "symbols/android/contrast/materialsymbolsrounded/contrast_24px.xml"
+    },
+    "dark_mode": {
+      "symbol": "dark_mode",
+      "filled": false,
+      "source": "symbols/android/dark_mode/materialsymbolsrounded/dark_mode_24px.xml"
+    },
+    "delete": {
+      "symbol": "delete",
+      "filled": false,
+      "source": "symbols/android/delete/materialsymbolsrounded/delete_24px.xml"
+    },
+    "delete_history": {
+      "symbol": "delete_history",
+      "filled": false,
+      "source": "symbols/android/delete_history/materialsymbolsrounded/delete_history_24px.xml"
+    },
+    "deselect": {
+      "symbol": "deselect",
+      "filled": false,
+      "source": "symbols/android/deselect/materialsymbolsrounded/deselect_24px.xml"
+    },
+    "discover_tune": {
+      "symbol": "manage_search",
+      "filled": false,
+      "source": "symbols/android/manage_search/materialsymbolsrounded/manage_search_24px.xml"
+    },
+    "done": {
+      "symbol": "done",
+      "filled": false,
+      "source": "symbols/android/done/materialsymbolsrounded/done_24px.xml"
+    },
+    "download": {
+      "symbol": "download",
+      "filled": false,
+      "source": "symbols/android/download/materialsymbolsrounded/download_24px.xml"
+    },
+    "drag_handle": {
+      "symbol": "drag_handle",
+      "filled": false,
+      "source": "symbols/android/drag_handle/materialsymbolsrounded/drag_handle_24px.xml"
+    },
+    "edit": {
+      "symbol": "edit",
+      "filled": false,
+      "source": "symbols/android/edit/materialsymbolsrounded/edit_24px.xml"
+    },
+    "equalizer": {
+      "symbol": "equalizer",
+      "filled": false,
+      "source": "symbols/android/equalizer/materialsymbolsrounded/equalizer_24px.xml"
+    },
+    "error": {
+      "symbol": "error",
+      "filled": false,
+      "source": "symbols/android/error/materialsymbolsrounded/error_24px.xml"
+    },
+    "expand_less": {
+      "symbol": "expand_less",
+      "filled": false,
+      "source": "symbols/android/expand_less/materialsymbolsrounded/expand_less_24px.xml"
+    },
+    "expand_more": {
+      "symbol": "expand_more",
+      "filled": false,
+      "source": "symbols/android/expand_more/materialsymbolsrounded/expand_more_24px.xml"
+    },
+    "explicit": {
+      "symbol": "explicit",
+      "filled": false,
+      "source": "symbols/android/explicit/materialsymbolsrounded/explicit_24px.xml"
+    },
+    "explore": {
+      "symbol": "explore",
+      "filled": false,
+      "source": "symbols/android/explore/materialsymbolsrounded/explore_24px.xml"
+    },
+    "explore_filled": {
+      "symbol": "explore",
+      "filled": true,
+      "source": "symbols/android/explore/materialsymbolsrounded/explore_fill1_24px.xml"
+    },
+    "explore_outlined": {
+      "symbol": "explore",
+      "filled": false,
+      "source": "symbols/android/explore/materialsymbolsrounded/explore_24px.xml"
+    },
+    "fast_forward": {
+      "symbol": "fast_forward",
+      "filled": false,
+      "source": "symbols/android/fast_forward/materialsymbolsrounded/fast_forward_24px.xml"
+    },
+    "favorite": {
+      "symbol": "favorite",
+      "filled": true,
+      "source": "symbols/android/favorite/materialsymbolsrounded/favorite_fill1_24px.xml"
+    },
+    "favorite_border": {
+      "symbol": "favorite",
+      "filled": false,
+      "source": "symbols/android/favorite/materialsymbolsrounded/favorite_24px.xml"
+    },
+    "format_align_center": {
+      "symbol": "format_align_center",
+      "filled": false,
+      "source": "symbols/android/format_align_center/materialsymbolsrounded/format_align_center_24px.xml"
+    },
+    "format_align_left": {
+      "symbol": "format_align_left",
+      "filled": false,
+      "source": "symbols/android/format_align_left/materialsymbolsrounded/format_align_left_24px.xml"
+    },
+    "gradient": {
+      "symbol": "gradient",
+      "filled": false,
+      "source": "symbols/android/gradient/materialsymbolsrounded/gradient_24px.xml"
+    },
+    "graphic_eq": {
+      "symbol": "graphic_eq",
+      "filled": false,
+      "source": "symbols/android/graphic_eq/materialsymbolsrounded/graphic_eq_24px.xml"
+    },
+    "grid_view": {
+      "symbol": "grid_view",
+      "filled": false,
+      "source": "symbols/android/grid_view/materialsymbolsrounded/grid_view_24px.xml"
+    },
+    "help": {
+      "symbol": "help",
+      "filled": false,
+      "source": "symbols/android/help/materialsymbolsrounded/help_24px.xml"
+    },
+    "history": {
+      "symbol": "history",
+      "filled": false,
+      "source": "symbols/android/history/materialsymbolsrounded/history_24px.xml"
+    },
+    "home_filled": {
+      "symbol": "home",
+      "filled": true,
+      "source": "symbols/android/home/materialsymbolsrounded/home_fill1_24px.xml"
+    },
+    "home_outlined": {
+      "symbol": "home",
+      "filled": false,
+      "source": "symbols/android/home/materialsymbolsrounded/home_24px.xml"
+    },
+    "ia_icon": {
+      "symbol": "auto_awesome",
+      "filled": false,
+      "source": "symbols/android/auto_awesome/materialsymbolsrounded/auto_awesome_24px.xml"
+    },
+    "image": {
+      "symbol": "image",
+      "filled": false,
+      "source": "symbols/android/image/materialsymbolsrounded/image_24px.xml"
+    },
+    "info": {
+      "symbol": "info",
+      "filled": false,
+      "source": "symbols/android/info/materialsymbolsrounded/info_24px.xml"
+    },
+    "language": {
+      "symbol": "language",
+      "filled": false,
+      "source": "symbols/android/language/materialsymbolsrounded/language_24px.xml"
+    },
+    "library_add": {
+      "symbol": "library_add",
+      "filled": false,
+      "source": "symbols/android/library_add/materialsymbolsrounded/library_add_24px.xml"
+    },
+    "library_add_check": {
+      "symbol": "library_add_check",
+      "filled": false,
+      "source": "symbols/android/library_add_check/materialsymbolsrounded/library_add_check_24px.xml"
+    },
+    "library_music": {
+      "symbol": "library_music",
+      "filled": false,
+      "source": "symbols/android/library_music/materialsymbolsrounded/library_music_24px.xml"
+    },
+    "library_music_filled": {
+      "symbol": "library_music",
+      "filled": true,
+      "source": "symbols/android/library_music/materialsymbolsrounded/library_music_fill1_24px.xml"
+    },
+    "library_music_outlined": {
+      "symbol": "library_music",
+      "filled": false,
+      "source": "symbols/android/library_music/materialsymbolsrounded/library_music_24px.xml"
+    },
+    "line_curve": {
+      "symbol": "show_chart",
+      "filled": false,
+      "source": "symbols/android/show_chart/materialsymbolsrounded/show_chart_24px.xml"
+    },
+    "link": {
+      "symbol": "link",
+      "filled": false,
+      "source": "symbols/android/link/materialsymbolsrounded/link_24px.xml"
+    },
+    "list": {
+      "symbol": "list",
+      "filled": false,
+      "source": "symbols/android/list/materialsymbolsrounded/list_24px.xml"
+    },
+    "location_on": {
+      "symbol": "location_on",
+      "filled": false,
+      "source": "symbols/android/location_on/materialsymbolsrounded/location_on_24px.xml"
+    },
+    "lock": {
+      "symbol": "lock",
+      "filled": false,
+      "source": "symbols/android/lock/materialsymbolsrounded/lock_24px.xml"
+    },
+    "lock_open": {
+      "symbol": "lock_open",
+      "filled": false,
+      "source": "symbols/android/lock_open/materialsymbolsrounded/lock_open_24px.xml"
+    },
+    "login": {
+      "symbol": "login",
+      "filled": false,
+      "source": "symbols/android/login/materialsymbolsrounded/login_24px.xml"
+    },
+    "lyrics": {
+      "symbol": "lyrics",
+      "filled": false,
+      "source": "symbols/android/lyrics/materialsymbolsrounded/lyrics_24px.xml"
+    },
+    "more_horiz": {
+      "symbol": "more_horiz",
+      "filled": false,
+      "source": "symbols/android/more_horiz/materialsymbolsrounded/more_horiz_24px.xml"
+    },
+    "more_vert": {
+      "symbol": "more_vert",
+      "filled": false,
+      "source": "symbols/android/more_vert/materialsymbolsrounded/more_vert_24px.xml"
+    },
+    "music_note": {
+      "symbol": "music_note",
+      "filled": false,
+      "source": "symbols/android/music_note/materialsymbolsrounded/music_note_24px.xml"
+    },
+    "nav_bar": {
+      "symbol": "bottom_navigation",
+      "filled": false,
+      "source": "symbols/android/bottom_navigation/materialsymbolsrounded/bottom_navigation_24px.xml"
+    },
+    "navigate_next": {
+      "symbol": "chevron_right",
+      "filled": false,
+      "source": "symbols/android/chevron_right/materialsymbolsrounded/chevron_right_24px.xml"
+    },
+    "new_releases": {
+      "symbol": "new_releases",
+      "filled": false,
+      "source": "symbols/android/new_releases/materialsymbolsrounded/new_releases_24px.xml"
+    },
+    "notification_off": {
+      "symbol": "notifications_off",
+      "filled": false,
+      "source": "symbols/android/notifications_off/materialsymbolsrounded/notifications_off_24px.xml"
+    },
+    "notification_on": {
+      "symbol": "notifications",
+      "filled": false,
+      "source": "symbols/android/notifications/materialsymbolsrounded/notifications_24px.xml"
+    },
+    "offline": {
+      "symbol": "offline_pin",
+      "filled": false,
+      "source": "symbols/android/offline_pin/materialsymbolsrounded/offline_pin_24px.xml"
+    },
+    "palette": {
+      "symbol": "palette",
+      "filled": false,
+      "source": "symbols/android/palette/materialsymbolsrounded/palette_24px.xml"
+    },
+    "pause": {
+      "symbol": "pause",
+      "filled": true,
+      "source": "symbols/android/pause/materialsymbolsrounded/pause_fill1_24px.xml"
+    },
+    "person": {
+      "symbol": "person",
+      "filled": false,
+      "source": "symbols/android/person/materialsymbolsrounded/person_24px.xml"
+    },
+    "play": {
+      "symbol": "play_arrow",
+      "filled": true,
+      "source": "symbols/android/play_arrow/materialsymbolsrounded/play_arrow_fill1_24px.xml"
+    },
+    "playlist_add": {
+      "symbol": "playlist_add",
+      "filled": false,
+      "source": "symbols/android/playlist_add/materialsymbolsrounded/playlist_add_24px.xml"
+    },
+    "playlist_play": {
+      "symbol": "playlist_play",
+      "filled": false,
+      "source": "symbols/android/playlist_play/materialsymbolsrounded/playlist_play_24px.xml"
+    },
+    "queue_music": {
+      "symbol": "queue_music",
+      "filled": false,
+      "source": "symbols/android/queue_music/materialsymbolsrounded/queue_music_24px.xml"
+    },
+    "radio": {
+      "symbol": "sensors",
+      "filled": false,
+      "source": "symbols/android/sensors/materialsymbolsrounded/sensors_24px.xml"
+    },
+    "radio_button_checked": {
+      "symbol": "radio_button_checked",
+      "filled": false,
+      "source": "symbols/android/radio_button_checked/materialsymbolsrounded/radio_button_checked_24px.xml"
+    },
+    "radio_button_unchecked": {
+      "symbol": "radio_button_unchecked",
+      "filled": false,
+      "source": "symbols/android/radio_button_unchecked/materialsymbolsrounded/radio_button_unchecked_24px.xml"
+    },
+    "remove": {
+      "symbol": "remove",
+      "filled": false,
+      "source": "symbols/android/remove/materialsymbolsrounded/remove_24px.xml"
+    },
+    "repeat": {
+      "symbol": "repeat",
+      "filled": false,
+      "source": "symbols/android/repeat/materialsymbolsrounded/repeat_24px.xml"
+    },
+    "repeat_on": {
+      "symbol": "repeat_on",
+      "filled": false,
+      "source": "symbols/android/repeat_on/materialsymbolsrounded/repeat_on_24px.xml"
+    },
+    "repeat_one": {
+      "symbol": "repeat_one",
+      "filled": false,
+      "source": "symbols/android/repeat_one/materialsymbolsrounded/repeat_one_24px.xml"
+    },
+    "repeat_one_on": {
+      "symbol": "repeat_one_on",
+      "filled": false,
+      "source": "symbols/android/repeat_one_on/materialsymbolsrounded/repeat_one_on_24px.xml"
+    },
+    "replay": {
+      "symbol": "replay",
+      "filled": false,
+      "source": "symbols/android/replay/materialsymbolsrounded/replay_24px.xml"
+    },
+    "scatter_plot": {
+      "symbol": "scatter_plot",
+      "filled": false,
+      "source": "symbols/android/scatter_plot/materialsymbolsrounded/scatter_plot_24px.xml"
+    },
+    "schedule": {
+      "symbol": "schedule",
+      "filled": false,
+      "source": "symbols/android/schedule/materialsymbolsrounded/schedule_24px.xml"
+    },
+    "screenshot": {
+      "symbol": "screenshot",
+      "filled": false,
+      "source": "symbols/android/screenshot/materialsymbolsrounded/screenshot_24px.xml"
+    },
+    "search": {
+      "symbol": "search",
+      "filled": false,
+      "source": "symbols/android/search/materialsymbolsrounded/search_24px.xml"
+    },
+    "search_off": {
+      "symbol": "search_off",
+      "filled": false,
+      "source": "symbols/android/search_off/materialsymbolsrounded/search_off_24px.xml"
+    },
+    "security": {
+      "symbol": "security",
+      "filled": false,
+      "source": "symbols/android/security/materialsymbolsrounded/security_24px.xml"
+    },
+    "select_all": {
+      "symbol": "select_all",
+      "filled": false,
+      "source": "symbols/android/select_all/materialsymbolsrounded/select_all_24px.xml"
+    },
+    "settings": {
+      "symbol": "settings",
+      "filled": false,
+      "source": "symbols/android/settings/materialsymbolsrounded/settings_24px.xml"
+    },
+    "shape_line": {
+      "symbol": "shapes",
+      "filled": false,
+      "source": "symbols/android/shapes/materialsymbolsrounded/shapes_24px.xml"
+    },
+    "share": {
+      "symbol": "share",
+      "filled": false,
+      "source": "symbols/android/share/materialsymbolsrounded/share_24px.xml"
+    },
+    "shortcut_explore": {
+      "symbol": "explore",
+      "filled": false,
+      "source": "symbols/android/explore/materialsymbolsrounded/explore_24px.xml"
+    },
+    "shortcut_library": {
+      "symbol": "library_music",
+      "filled": false,
+      "source": "symbols/android/library_music/materialsymbolsrounded/library_music_24px.xml"
+    },
+    "shortcut_search": {
+      "symbol": "search",
+      "filled": false,
+      "source": "symbols/android/search/materialsymbolsrounded/search_24px.xml"
+    },
+    "shuffle": {
+      "symbol": "shuffle",
+      "filled": false,
+      "source": "symbols/android/shuffle/materialsymbolsrounded/shuffle_24px.xml"
+    },
+    "shuffle_on": {
+      "symbol": "shuffle_on",
+      "filled": false,
+      "source": "symbols/android/shuffle_on/materialsymbolsrounded/shuffle_on_24px.xml"
+    },
+    "similar": {
+      "symbol": "join_inner",
+      "filled": false,
+      "source": "symbols/android/join_inner/materialsymbolsrounded/join_inner_24px.xml"
+    },
+    "skip_next": {
+      "symbol": "skip_next",
+      "filled": true,
+      "source": "symbols/android/skip_next/materialsymbolsrounded/skip_next_fill1_24px.xml"
+    },
+    "skip_previous": {
+      "symbol": "skip_previous",
+      "filled": true,
+      "source": "symbols/android/skip_previous/materialsymbolsrounded/skip_previous_fill1_24px.xml"
+    },
+    "sliders": {
+      "symbol": "tune",
+      "filled": false,
+      "source": "symbols/android/tune/materialsymbolsrounded/tune_24px.xml"
+    },
+    "speed": {
+      "symbol": "speed",
+      "filled": false,
+      "source": "symbols/android/speed/materialsymbolsrounded/speed_24px.xml"
+    },
+    "storage": {
+      "symbol": "storage",
+      "filled": false,
+      "source": "symbols/android/storage/materialsymbolsrounded/storage_24px.xml"
+    },
+    "subscribe": {
+      "symbol": "person_add",
+      "filled": false,
+      "source": "symbols/android/person_add/materialsymbolsrounded/person_add_24px.xml"
+    },
+    "subscribed": {
+      "symbol": "how_to_reg",
+      "filled": false,
+      "source": "symbols/android/how_to_reg/materialsymbolsrounded/how_to_reg_24px.xml"
+    },
+    "swipe": {
+      "symbol": "swipe",
+      "filled": false,
+      "source": "symbols/android/swipe/materialsymbolsrounded/swipe_24px.xml"
+    },
+    "sync": {
+      "symbol": "sync",
+      "filled": false,
+      "source": "symbols/android/sync/materialsymbolsrounded/sync_24px.xml"
+    },
+    "tab": {
+      "symbol": "tab",
+      "filled": false,
+      "source": "symbols/android/tab/materialsymbolsrounded/tab_24px.xml"
+    },
+    "token": {
+      "symbol": "token",
+      "filled": false,
+      "source": "symbols/android/token/materialsymbolsrounded/token_24px.xml"
+    },
+    "translate": {
+      "symbol": "translate",
+      "filled": false,
+      "source": "symbols/android/translate/materialsymbolsrounded/translate_24px.xml"
+    },
+    "trending_up": {
+      "symbol": "trending_up",
+      "filled": false,
+      "source": "symbols/android/trending_up/materialsymbolsrounded/trending_up_24px.xml"
+    },
+    "tune": {
+      "symbol": "tune",
+      "filled": false,
+      "source": "symbols/android/tune/materialsymbolsrounded/tune_24px.xml"
+    },
+    "update": {
+      "symbol": "update",
+      "filled": false,
+      "source": "symbols/android/update/materialsymbolsrounded/update_24px.xml"
+    },
+    "volume_off": {
+      "symbol": "volume_off",
+      "filled": false,
+      "source": "symbols/android/volume_off/materialsymbolsrounded/volume_off_24px.xml"
+    },
+    "volume_up": {
+      "symbol": "volume_up",
+      "filled": false,
+      "source": "symbols/android/volume_up/materialsymbolsrounded/volume_up_24px.xml"
+    },
+    "wifi_proxy": {
+      "symbol": "wifi",
+      "filled": false,
+      "source": "symbols/android/wifi/materialsymbolsrounded/wifi_24px.xml"
+    },
+    "restore": {
+      "symbol": "history",
+      "filled": false,
+      "source": "symbols/android/history/materialsymbolsrounded/history_24px.xml"
+    }
+  }
+}
