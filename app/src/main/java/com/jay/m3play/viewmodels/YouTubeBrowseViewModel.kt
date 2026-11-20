@@ -1,0 +1,48 @@
+/*
+ * This file is part of M3 Play.
+ * License information: see LICENSE in the repository root.
+ * Copyright and authorship: see Git history and any notices below.
+ */
+
+package com.jay.m3play.viewmodels
+
+import android.content.Context
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jay.innertube.YouTube
+import com.jay.innertube.pages.BrowseResult
+import com.jay.m3play.constants.HideExplicitKey
+import com.jay.m3play.utils.dataStore
+import com.jay.m3play.utils.get
+import com.jay.m3play.utils.reportException
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class YouTubeBrowseViewModel
+@Inject
+constructor(
+    @ApplicationContext val context: Context,
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+    private val browseId = savedStateHandle.get<String>("browseId")!!
+    private val params = savedStateHandle.get<String>("params")
+
+    val result = MutableStateFlow<BrowseResult?>(null)
+
+    init {
+        viewModelScope.launch {
+            YouTube
+                .browse(browseId, params)
+                .onSuccess {
+                    result.value = it.filterExplicit(context.dataStore.get(HideExplicitKey, false))
+                }.onFailure {
+                    reportException(it)
+                }
+        }
+    }
+}
